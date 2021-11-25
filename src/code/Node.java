@@ -4,14 +4,14 @@ public class Node {
 	private State state;
 	// every node will not deleted because its children reference to it big Memory
 	private Node parentNode;
-	private Operater operater;
+	private Operator operator;
 	private int depth;
 	private long pathCost;
 
-	public Node(State state, Node parentNode, Operater operater) {
+	public Node(State state, Node parentNode, Operator operator) {
 		this.state = state;
 		this.parentNode = parentNode;
-		this.operater = operater;
+		this.operator = operator;
 		if (parentNode != null) {
 			depth = parentNode.getDepth() + 1;
 			pathCost = parentNode.getPathCost();
@@ -34,12 +34,12 @@ public class Node {
 		this.parentNode = parentNode;
 	}
 
-	public Operater getOperater() {
-		return operater;
+	public Operator getOperator() {
+		return operator;
 	}
 
-	public void setOperater(Operater operater) {
-		this.operater = operater;
+	public void setOperator(Operator operator) {
+		this.operator = operator;
 	}
 
 	public int getDepth() {

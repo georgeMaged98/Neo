@@ -1,6 +1,6 @@
 package code;
 
-public abstract class Operater {
+public abstract class Operator {
     private long costValue;
     private String name;
     
@@ -13,6 +13,8 @@ public abstract class Operater {
     }
 
     public abstract Node apply(Node node);
+
+    public abstract Node isActionDoable(Node node);
 
     public long getCostValue() {
         return costValue;
