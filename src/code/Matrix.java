@@ -7,11 +7,6 @@ public class Matrix extends SearchProblem {
 //		initialState;
 	}
 
-	/**
-	 * @param s 
-	 * @return 
-	 * 
-	 * */
 	public boolean goalTest(State s) {
 
 		return false;

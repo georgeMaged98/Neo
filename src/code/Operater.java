@@ -3,7 +3,7 @@ package code;
 public abstract class Operater {
     private long costValue;
     private String name;
-    
+
     public String getName() {
         return name;
     }
