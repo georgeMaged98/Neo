@@ -22,11 +22,11 @@ public abstract class SearchProcedure { // To be named strategy
 			Node node = dequeue();
 
 			State currentState = node.getState();
-			ArrayList<Operater> operators = problem.getOperaters();
+			ArrayList<Operator> operators = problem.getOperators();
 			if (problem.goalTest(currentState))
 				return node;
 			
-			for(Operater operator : operators) {
+			for(Operator operator : operators) {
 				// Check for valid operators
 				
 				// Check for duplicate states

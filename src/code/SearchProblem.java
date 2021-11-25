@@ -3,7 +3,7 @@ package code;
 import java.util.ArrayList;
 
 public abstract class SearchProblem {
-	private ArrayList<Operater> operaters;
+	private ArrayList<Operator> operators;
 	private State intialState;
 
 	public abstract boolean goalTest(State s);
@@ -16,12 +16,12 @@ public abstract class SearchProblem {
 		this.intialState = intialState;
 	}
 
-	public ArrayList<Operater> getOperaters() {
-		return operaters;
+	public ArrayList<Operator> getOperators() {
+		return operators;
 	}
 
-	public void setOperaters(ArrayList<Operater> operaters) {
-		this.operaters = operaters;
+	public void setOperators(ArrayList<Operator> operators) {
+		this.operators = operators;
 	}
 
 }

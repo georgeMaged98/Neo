@@ -1,60 +1,61 @@
 package code;
 
 public class Node {
-    private State state;
-    // every node will not deleted because its children reference to it big Memory
-    private Node parentNode;
-    private Operater operater;
-    private int depth;
-    private long pathCost;
 
-    public Node(State state, Node parentNode, Operater operater) {
-        this.state = state;
-        this.parentNode = parentNode;
-        this.operater = operater;
-        if (parentNode != null) {
-            depth = parentNode.getDepth() + 1;
-            pathCost = parentNode.getPathCost();
-        }
-    }
+	private State state;
+	// every node will not deleted because its children reference to it big Memory
+	private Node parentNode;
+	private Operator operator;
+	private int depth;
+	private long pathCost;
 
-    public State getState() {
-        return state;
-    }
+	public Node(State state, Node parentNode, Operator operator) {
+		this.state = state;
+		this.parentNode = parentNode;
+		this.operator = operator;
+		if (parentNode != null) {
+			depth = parentNode.getDepth() + 1;
+			pathCost = parentNode.getPathCost();
+		}
+	}
 
-    public void setState(State state) {
-        this.state = state;
-    }
+	public State getState() {
+		return state;
+	}
 
-    public Node getParentNode() {
-        return parentNode;
-    }
+	public void setState(State state) {
+		this.state = state;
+	}
 
-    public void setParentNode(Node parentNode) {
-        this.parentNode = parentNode;
-    }
+	public Node getParentNode() {
+		return parentNode;
+	}
 
-    public Operater getOperater() {
-        return operater;
-    }
+	public void setParentNode(Node parentNode) {
+		this.parentNode = parentNode;
+	}
 
-    public void setOperater(Operater operater) {
-        this.operater = operater;
-    }
+	public Operator getOperator() {
+		return operator;
+	}
 
-    public int getDepth() {
-        return depth;
-    }
+	public void setOperator(Operator operator) {
+		this.operator = operator;
+	}
 
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
+	public int getDepth() {
+		return depth;
+	}
 
-    public long getPathCost() {
-        return pathCost;
-    }
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
 
-    public void setPathCost(long pathCost) {
-        this.pathCost = pathCost;
-    }
+	public long getPathCost() {
+		return pathCost;
+	}
+
+	public void setPathCost(long pathCost) {
+		this.pathCost = pathCost;
+	}
 }
