@@ -1,6 +1,13 @@
 package code;
 
 public class Matrix extends SearchProblem {
+	GridElement[][]grid;
+	int dim_x,dim_y;
+	int pillsNum;
+	int maxCarriedHostages;
+	int agentsNum,hostagesNum;
+	Pos[]pads;
+	Pos[]pills;
 
 	public Matrix() {
 //		operators;
