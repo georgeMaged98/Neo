@@ -7,9 +7,8 @@ public class BFS extends SearchProcedure {
 	private Queue<Node> queue;
 	
 	public BFS(SearchProblem problem) {
-		// TODO Auto-generated constructor stub
 		this.problem = problem;
-		queue = new LinkedList<Node>();
+		queue = new LinkedList<>();
 	}
 	
 	@Override

@@ -22,6 +22,7 @@ public abstract class SearchProcedure { // To be named strategy
 			Node node = dequeue();
 
 			State currentState = node.getState();
+			StateObject stateObject=currentState.getStateObject();
 			ArrayList<Operator> operators = problem.getOperators();
 			if (problem.goalTest(currentState))
 				return node;
@@ -32,7 +33,8 @@ public abstract class SearchProcedure { // To be named strategy
 				// Check for duplicate states
 				
 				// expand node
-				
+		//		operator.apply(node,stateObject);
+
 				Node expandedNode = operator.apply(node);
 				enqueue(expandedNode);
 				
