@@ -9,22 +9,41 @@ public class State {
     public StateObject getStateObject(){
         String[]stateArray=data.split(";");
         StateObject stateObject=new StateObject();
+
         stateObject.setNeoPos(getNeoPos(stateArray[0]));
+        stateObject.setNeoDamage(getNeoDamage(stateArray[0]));
+
         stateObject.setIsAgentKilled(getKilledAgents(stateArray[1]));
+        stateObject.setnKills(getNumKilledAgents(stateArray[1]));
+
         int[]damage=getDamageHostages(stateArray[2]);
         stateObject.setHostageDamage(damage);
         stateObject.setIsHostageCarried(getCarriedHostages(stateArray[3]));
+
         stateObject.setIsTurnedAgent(getTurnedAgents(damage));
+
         stateObject.setIsPillTaken(getTakenPills(stateArray[4]));
+
+        stateObject.setIsRescuedHostage(getRescuedHostages(stateArray[5]));
+        stateObject.setnRescued(getNumRescuedHostages(stateArray[5]));
 
         return stateObject;
     }
+
     public Pos getNeoPos(String posString){
         String[]coordinates=posString.split(",");
         int x=Integer.parseInt(coordinates[0]);
         int y=Integer.parseInt(coordinates[1]);
         return new Pos(x,y);
     }
+
+    public int getNeoDamage(String neoString){
+        String[] neoStringArr=neoString.split(",");
+        int damage = Integer.parseInt(neoStringArr[2]);
+
+        return damage;
+    }
+
     public boolean[] getKilledAgents(String killedAgentsString){
         String[]killedAgentsArr=killedAgentsString.split(",");
         boolean[]killedAgents=new boolean[10];
@@ -34,6 +53,7 @@ public class State {
         }
         return killedAgents;
     }
+
     public int[] getDamageHostages(String DamageString){
         String[]damageArray=DamageString.split(",");
         int[]damage=new int[10];
@@ -70,6 +90,24 @@ public class State {
         return takenPills;
     }
 
+    public boolean[] getRescuedHostages(String rescuedHostageString){
+        boolean[] rescuedHostages=new boolean[10];
+        for(int i=0;i<rescuedHostageString.length();i++){
+            int idx=Integer.parseInt(rescuedHostageString.charAt(i)+"");
+            rescuedHostages[idx]=true;
+        }
+        return rescuedHostages;
+    }
 
+    public int getNumKilledAgents(String killedAgentsString){
+        String[]killedAgentsArr=killedAgentsString.split(",");
+        return killedAgentsArr.length;
+    }
+
+
+    public int getNumRescuedHostages(String rescuedHostageString){
+        String[]rescuedHostagesArr=rescuedHostageString.split(",");
+        return rescuedHostagesArr.length;
+    }
 
 }

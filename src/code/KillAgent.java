@@ -21,26 +21,31 @@ public class KillAgent extends Operator {
         Pos neoPos = currentStateObject.neoPos;
         boolean[] isAgentKilled = currentStateObject.isAgentKilled;
         boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
+        boolean[] isHostageCarried = currentStateObject.isHostageCarried;
+        boolean[] isHostageRescued = currentStateObject.isRescuedHostage;
 
         Matrix currentMatrixProblem = this.getMatrix();
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        // check if there are any agents in the neighboring cells (x+1, x-1, y-1, y+1) that are not yet killed
         boolean leftCell = false;
         boolean rightCell = false;
         boolean downCell = false;
         boolean upCell = false;
 
         if(neoPos.x - 1 >=0)
-            leftCell = containsAgent(grid, neoPos.x - 1, neoPos.y, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x - 1, neoPos.y,isTurnedAgent);
+            leftCell = containsAgent(grid, neoPos.x - 1, neoPos.y, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x - 1, neoPos.y,isTurnedAgent, isHostageRescued, isHostageCarried);
 
         if(neoPos.x + 1 <= currentMatrixProblem.dim_x )
-            rightCell = containsAgent(grid, neoPos.x + 1, neoPos.y, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x + 1, neoPos.y, isTurnedAgent);
+            rightCell = containsAgent(grid, neoPos.x + 1, neoPos.y, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x + 1, neoPos.y, isTurnedAgent, isHostageRescued, isHostageCarried);
 
         if(neoPos.y - 1 >= 0)
-            upCell = containsAgent(grid, neoPos.x, neoPos.y - 1, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x, neoPos.y - 1, isTurnedAgent);
+            upCell = containsAgent(grid, neoPos.x, neoPos.y - 1, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x, neoPos.y - 1, isTurnedAgent, isHostageRescued, isHostageCarried);
         if(neoPos.y <= currentMatrixProblem.dim_y)
-            downCell = containsAgent(grid, neoPos.x, neoPos.y + 1, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x, neoPos.y + 1, isTurnedAgent);
+            downCell = containsAgent(grid, neoPos.x, neoPos.y + 1, isAgentKilled) ||  containsTurnedAgent(grid, neoPos.x, neoPos.y + 1, isTurnedAgent, isHostageRescued, isHostageCarried);
 
-        // check if there are any agents in the neighboring cells (x+1, x-1, y-1, y+1) that are not yet killed
+        if (leftCell || rightCell || upCell || downCell)
+            return true;
+
         return false;
     }
 
@@ -48,6 +53,9 @@ public class KillAgent extends Operator {
         return grid[x][y].matrixObject == MatrixObject.AGENT && !isAgentKilled[grid[x][y].index];
     }
 
-    public static boolean containsTurnedAgent(GridElement[][] grid, int x, int y, boolean[] isTurnedAgent){
-        return grid[x][y].matrixObject == MatrixObject.HOSTAGE && !isTurnedAgent[grid[x][y].index];    }
+    public static boolean containsTurnedAgent(GridElement[][] grid, int x, int y, boolean[] isTurnedAgent, boolean[] isHostageRescued, boolean[] isCarriedHostage){
+        MatrixObject matrixObject = grid[x][y].matrixObject;
+        int hostageIdx = grid[x][y].index;
+
+        return matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[hostageIdx] && !isHostageRescued[hostageIdx] && !isCarriedHostage[hostageIdx];    }
 }
