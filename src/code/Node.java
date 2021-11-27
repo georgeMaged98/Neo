@@ -9,6 +9,26 @@ public class Node {
     private int depth;
     private long pathCost;
 
+    public int getnKills() {
+        return nKills;
+    }
+
+    public void setnKills(int nKills) {
+        this.nKills = nKills;
+    }
+
+    public int getnRescued() {
+        return nRescued;
+    }
+
+    public void setnRescued(int nRescued) {
+        this.nRescued = nRescued;
+    }
+
+    private int nKills;
+    private int nRescued;
+
+
     public Node(State state, Node parentNode, Operator operator) {
         this.state = state;
         this.parentNode = parentNode;
