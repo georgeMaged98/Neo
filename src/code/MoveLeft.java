@@ -7,10 +7,11 @@ public class MoveLeft extends Operator{
     }
 
     @Override
-    public Node apply(Node node, StateObject currentStateObject) {
+    public StateObject apply(StateObject currentStateObject) {
 
         // x -> x - 1
-        return null;
+        currentStateObject.neoPos.x -= 1;
+        return currentStateObject;
     }
 
     @Override
@@ -20,6 +21,7 @@ public class MoveLeft extends Operator{
 
         boolean[] isAgentKilled = currentStateObject.isAgentKilled;
         boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
+
         Matrix currentMatrixProblem = this.getMatrix();
 
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter
@@ -36,7 +38,8 @@ public class MoveLeft extends Operator{
         }
 
         // check if the left cell contains hostage which is turned to agent
-        if(leftCell.matrixObject == MatrixObject.HOSTAGE && !isTurnedAgent[leftCell.index]){
+        int leftCellIdx = leftCell.index;
+        if(leftCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[leftCellIdx]){
             return false;
         }
 

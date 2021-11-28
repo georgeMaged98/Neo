@@ -7,12 +7,24 @@ public class DropHostage  extends Operator{
     }
 
     @Override
-    public Node apply(Node node, StateObject currentStateObject) {
+    public StateObject apply(StateObject currentStateObject) {
 
-        // change number of carried hostages to 0.
+        boolean[] isHostageCarried = currentStateObject.isHostageCarried;
+        boolean[] isHostageRescued = currentStateObject.isRescuedHostage;
 
-        // make all carried hostages rescued.
-        return null;
+        // change number of carried hostages to 0 and make these hostages rescued
+        // count number of rescued hostages
+        int  nRescued = 0;
+        for(int i=0; i<isHostageCarried.length;i++){
+            if(isHostageCarried[i]){
+                isHostageCarried[i] = false;
+                isHostageRescued[i] = true;
+                nRescued++;
+            }
+        }
+        currentStateObject.setnRescued(nRescued);
+
+        return currentStateObject;
     }
 
     @Override
@@ -25,11 +37,10 @@ public class DropHostage  extends Operator{
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
-
         // Neo must be in the same cell as TB.
-        if(currentCell.matrixObject == MatrixObject.TELEPHONE_BOOTH)
-            return  true;
+        if(currentCell.matrixObject != MatrixObject.TELEPHONE_BOOTH)
+            return  false;
 
-        return false;
+        return true;
     }
 }
