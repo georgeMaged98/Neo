@@ -2,8 +2,8 @@ package code;
 
 public class KillAgent extends Operator {
 
-    public KillAgent(long costValue, Matrix matrix) {
-        super(costValue, matrix, );
+    public KillAgent(long costValue, Matrix matrix, String name) {
+        super(costValue, matrix, name);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class KillAgent extends Operator {
         int[] hostageDamage = currentStateObject.getHostageDamage();
 
         Matrix currentMatrixProblem = this.getMatrix();
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
 
         // reduce Neo health by 20 (not below 0) OR increase Neo's damage by 20 (not more than 100)
         int neoDamage = currentStateObject.getNeoDamage();
@@ -51,15 +51,15 @@ public class KillAgent extends Operator {
     @Override
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
-        boolean[] isAgentKilled = currentStateObject.isAgentKilled;
-        boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
-        boolean[] isHostageCarried = currentStateObject.isHostageCarried;
+        Pos neoPos = currentStateObject.getNeoPos();
+        boolean[] isAgentKilled = currentStateObject.getIsAgentKilled();
+        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
+        boolean[] isHostageCarried = currentStateObject.getIsHostageCarried();
         boolean[] isHostageRescued = currentStateObject.getIsRescuedHostage();
-        int[] hostageDamage = currentStateObject.hostageDamage;
+        int[] hostageDamage = currentStateObject.getHostageDamage();
 
         Matrix currentMatrixProblem = this.getMatrix();
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         // check if there are any agents in the neighboring cells (x+1, x-1, y-1, y+1) that are not yet killed
         boolean leftCell = false;
         boolean rightCell = false;
@@ -69,12 +69,12 @@ public class KillAgent extends Operator {
         if (neoPos.x - 1 >= 0)
             leftCell = containsAgent(grid, neoPos.x - 1, neoPos.y, isAgentKilled) || containsTurnedAgent(grid, neoPos.x - 1, neoPos.y, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
-        if (neoPos.x + 1 <= currentMatrixProblem.width)
+        if (neoPos.x + 1 <= currentMatrixProblem.getWidth())
             rightCell = containsAgent(grid, neoPos.x + 1, neoPos.y, isAgentKilled) || containsTurnedAgent(grid, neoPos.x + 1, neoPos.y, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
         if (neoPos.y - 1 >= 0)
             downCell = containsAgent(grid, neoPos.x, neoPos.y - 1, isAgentKilled) || containsTurnedAgent(grid, neoPos.x, neoPos.y - 1, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
-        if (neoPos.y <= currentMatrixProblem.height)
+        if (neoPos.y <= currentMatrixProblem.getHeight())
             upCell = containsAgent(grid, neoPos.x, neoPos.y + 1, isAgentKilled) || containsTurnedAgent(grid, neoPos.x, neoPos.y + 1, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
         if (leftCell || rightCell || upCell || downCell)

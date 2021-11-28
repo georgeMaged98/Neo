@@ -2,21 +2,21 @@ package code;
 
 public class TakePill extends Operator{
 
-    public TakePill(long costValue, Matrix matrix) {
-        super(costValue, matrix, );
+    public TakePill(long costValue, Matrix matrix, String name) {
+        super(costValue, matrix, name);
     }
 
     @Override
     public StateObject apply(StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
+        Pos neoPos = currentStateObject.getNeoPos();
         int neoDamage = currentStateObject.getNeoDamage();
-        boolean[] isPillTaken = currentStateObject.isPillTaken;
-        boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
+        boolean[] isPillTaken = currentStateObject.getIsPillTaken();
+        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         GridElement currentCell = grid[neoPos.x][neoPos.y];
         int pillIdx = currentCell.index;
 
@@ -27,7 +27,7 @@ public class TakePill extends Operator{
             currentStateObject.setNeoDamage(0);
 
         // decrease damage for all ALIVE hostages by 22
-        int[] hostageDamage = currentStateObject.hostageDamage;
+        int[] hostageDamage = currentStateObject.getHostageDamage();
         for (int i=0;i<hostageDamage.length;i++){
             // Decrease the damage to hostages which are either in place or carried.
             // -> The hostage should not be a turned agent and its damage should be less than 100
@@ -49,12 +49,12 @@ public class TakePill extends Operator{
     @Override
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
-        boolean[] isPillTaken = currentStateObject.isPillTaken;
+        Pos neoPos = currentStateObject.getNeoPos();
+        boolean[] isPillTaken = currentStateObject.getIsPillTaken();
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
         // check if there is a pill in the current cell

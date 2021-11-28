@@ -1,12 +1,12 @@
 package code;
 
 public class StateObject {
-    Pos neoPos;
-     boolean[] isAgentKilled;
-     int[] hostageDamage;
-     boolean[] isHostageCarried;
-     boolean[] isTurnedAgent;
-     boolean[] isPillTaken;
+    private Pos neoPos;
+    private boolean[] isAgentKilled;
+    private int[] hostageDamage;
+    private boolean[] isHostageCarried;
+    private boolean[] isTurnedAgent;
+    private boolean[] isPillTaken;
     private boolean[] isRescuedHostage;
     private int nKills;
     private int nRescued;

@@ -9,11 +9,11 @@ public class CarryHostage extends Operator {
     @Override
     public StateObject apply(StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
-        boolean[] isHostageCarried = currentStateObject.isHostageCarried;
+        Pos neoPos = currentStateObject.getNeoPos();
+        boolean[] isHostageCarried = currentStateObject.getIsHostageCarried();
 
         Matrix currentMatrixProblem = this.getMatrix();
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
         // add hostage to be carried
@@ -37,7 +37,7 @@ public class CarryHostage extends Operator {
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid();
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
         // check if there is an un-carried hostage in the current cell
@@ -61,7 +61,7 @@ public class CarryHostage extends Operator {
 
             // check if Neo carry max number of hostages
             int numHostagesCarried = getCarriedHostagesNumber(isCarriedHostage);
-            if (numHostagesCarried == currentMatrixProblem.maxCarry) {
+            if (numHostagesCarried == currentMatrixProblem.getMaxCarry()) {
                 return false;
             }
 

@@ -2,15 +2,15 @@ package code;
 
 public class DropHostage  extends Operator{
 
-    public DropHostage(long costValue, Matrix matrix) {
-        super(costValue, matrix, );
+    public DropHostage(long costValue, Matrix matrix,String name) {
+        super(costValue, matrix, name);
     }
 
     @Override
     public StateObject apply(StateObject currentStateObject) {
 
-        boolean[] isHostageCarried = currentStateObject.isHostageCarried;
-        boolean[] isHostageRescued = currentStateObject.isRescuedHostage;
+        boolean[] isHostageCarried = currentStateObject.getIsHostageCarried();
+        boolean[] isHostageRescued = currentStateObject.getIsRescuedHostage();
 
         // change number of carried hostages to 0 and make these hostages rescued
         // count number of rescued hostages
@@ -30,11 +30,11 @@ public class DropHostage  extends Operator{
     @Override
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
+        Pos neoPos = currentStateObject.getNeoPos();
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
         // Neo must be in the same cell as TB.

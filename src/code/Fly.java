@@ -9,18 +9,32 @@ public class Fly  extends Operator{
     @Override
     public StateObject apply(StateObject currentStateObject) {
 
+
+        Pos neoPos = currentStateObject.getNeoPos();
+
+        Matrix currentMatrixProblem = this.getMatrix();
+
+        GridElement[][] grid = currentMatrixProblem.getGrid();
+        GridElement currentCell = grid[neoPos.x][neoPos.y];
+
+        int padIdx = currentCell.index;
+
         // change Neo's position to the end point of this pad pairs.
-        return null;
+        Pos destination = currentMatrixProblem.getFinishPadPos()[padIdx];
+
+        currentStateObject.setNeoPos(destination);
+
+        return currentStateObject;
     }
 
     @Override
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
+        Pos neoPos = currentStateObject.getNeoPos();
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid();
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
         // check if there is a pad in the current cell

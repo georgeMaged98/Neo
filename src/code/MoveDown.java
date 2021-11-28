@@ -2,29 +2,29 @@ package code;
 
 public class MoveDown extends Operator{
 
-    public MoveDown(long costValue, Matrix matrix) {
-        super(costValue, matrix, );
+    public MoveDown(long costValue, Matrix matrix, String name) {
+        super(costValue, matrix, name);
     }
 
     @Override
     public StateObject apply(StateObject currentStateObject) {
 
         // y -> y-1
-        currentStateObject.neoPos.y -= 1;
+        currentStateObject.getNeoPos().y -= 1;
         return currentStateObject;
     }
 
     @Override
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
+        Pos neoPos = currentStateObject.getNeoPos();
 
-        boolean[] isAgentKilled = currentStateObject.isAgentKilled;
-        boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
+        boolean[] isAgentKilled = currentStateObject.getIsAgentKilled();
+        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         GridElement downCell = grid[neoPos.x][neoPos.y - 1];
 
         // check if Neo is not facing a wall

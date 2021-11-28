@@ -4,11 +4,60 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Matrix extends SearchProblem {
-    GridElement[][] grid;
-    int maxCarry;
+    private GridElement[][] grid;
+    private int maxCarry;
     private int width, height;
     private Pos neoPos, telephonePos;
     private Pos[] agentsPos, pillsPos, startPadPos, finishPadPos, hostagePos;
+
+    public GridElement[][] getGrid() {
+        return grid;
+    }
+
+    public int getMaxCarry() {
+        return maxCarry;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Pos getNeoPos() {
+        return neoPos;
+    }
+
+    public Pos getTelephonePos() {
+        return telephonePos;
+    }
+
+    public Pos[] getAgentsPos() {
+        return agentsPos;
+    }
+
+    public Pos[] getPillsPos() {
+        return pillsPos;
+    }
+
+    public Pos[] getStartPadPos() {
+        return startPadPos;
+    }
+
+    public Pos[] getFinishPadPos() {
+        return finishPadPos;
+    }
+
+    public Pos[] getHostagePos() {
+        return hostagePos;
+    }
+
+    public int[] getHostageDamage() {
+        return hostageDamage;
+    }
+
     private int[] hostageDamage;
 
 
@@ -35,15 +84,15 @@ public class Matrix extends SearchProblem {
     }
     public void initializeOperator(){
         ArrayList<Operator>operators=new ArrayList<>();
-        operators.add(new CarryHostage(0,this, name));
-        operators.add(new DropHostage(0,this));
-        operators.add(new TakePill(0,this));
-        operators.add(new KillAgent(0,this));
+        operators.add(new CarryHostage(0,this, "carry"));
+        operators.add(new DropHostage(0,this, "drop"));
+        operators.add(new TakePill(0,this, "takePill"));
+        operators.add(new KillAgent(0,this, "kill"));
         operators.add(new Fly(0,this,"fly"));
-        operators.add(new MoveLeft(0,this));
-        operators.add(new MoveRight(0,this));
-        operators.add(new MoveDown(0,this));
-        operators.add(new MoveUp(0,this));
+        operators.add(new MoveLeft(0,this, "left"));
+        operators.add(new MoveRight(0,this, "right"));
+        operators.add(new MoveDown(0,this, "down"));
+        operators.add(new MoveUp(0,this, "up"));
         setOperators(operators);
     }
     public void fillMatrix() {
@@ -125,7 +174,7 @@ public class Matrix extends SearchProblem {
         SearchProcedure searchProcedure=null;
         if(strategy.equals("BFS"))
              searchProcedure=new BFS(matrix);
-        // create node -intialstate -
+        // create node -initialState -
         StateObject stateObject=new StateObject();
         fillStateObject(stateObject,matrix);
         State initialState=new State(stateObject);
@@ -134,11 +183,13 @@ public class Matrix extends SearchProblem {
         Node answer=searchProcedure.search(initialNode);
 
 
+        return prepareOutput(answer);
+    }
 
-    }
     public  static String prepareOutput(Node goal){
-        S
+        return "";
     }
+
     private static void fillStateObject(StateObject stateObject,Matrix matrix){
         stateObject.setNeoPos(matrix.neoPos);
         stateObject.setIsAgentKilled(new boolean[matrix.agentsPos.length]);
