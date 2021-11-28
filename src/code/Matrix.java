@@ -39,7 +39,7 @@ public class Matrix extends SearchProblem {
         operators.add(new DropHostage(0,this));
         operators.add(new TakePill(0,this));
         operators.add(new KillAgent(0,this));
-        operators.add(new Fly(0,this));
+        operators.add(new Fly(0,this,"fly"));
         operators.add(new MoveLeft(0,this));
         operators.add(new MoveRight(0,this));
         operators.add(new MoveDown(0,this));

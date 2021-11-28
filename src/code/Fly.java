@@ -7,7 +7,7 @@ public class Fly  extends Operator{
     }
 
     @Override
-    public Node apply(Node node, StateObject currentStateObject) {
+    public StateObject apply(StateObject currentStateObject) {
 
         // change Neo's position to the end point of this pad pairs.
         return null;
