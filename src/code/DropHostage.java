@@ -3,7 +3,7 @@ package code;
 public class DropHostage  extends Operator{
 
     public DropHostage(long costValue, Matrix matrix) {
-        super(costValue, matrix);
+        super(costValue, matrix, );
     }
 
     @Override

@@ -6,12 +6,12 @@ public class UCS extends SearchProcedure {
     PriorityQueue<Node> queue = new PriorityQueue<>(this::compare);
 
     private int compare(Node x, Node y) {
-        if (x.getnRescued() == y.getnRescued()) {
+        if (x.getnDeathes() == y.getnDeathes()) {
             if (x.getnKills() == y.getnKills())
                 return x.getDepth() - y.getDepth();
             return x.getnKills() - y.getnKills();
         }
-        return y.getnRescued() - x.getnRescued();
+        return x.getnDeathes() - y.getnDeathes();
     }
 
     @Override

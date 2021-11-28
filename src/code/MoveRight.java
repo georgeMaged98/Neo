@@ -3,7 +3,7 @@ package code;
 public class MoveRight extends Operator {
 
     public MoveRight(long costValue, Matrix matrix) {
-        super(costValue, matrix);
+        super(costValue, matrix, );
     }
 
     @Override
@@ -29,7 +29,7 @@ public class MoveRight extends Operator {
         GridElement rightCell = grid[neoPos.x + 1][neoPos.y];
 
         // check if Neo is not facing a wall
-        if (neoPos.x + 1 == currentMatrixProblem.dim_x) {
+        if (neoPos.x + 1 == currentMatrixProblem.width) {
             return false;
         }
 

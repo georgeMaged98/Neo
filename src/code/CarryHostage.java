@@ -3,7 +3,7 @@ package code;
 public class CarryHostage extends Operator {
 
     public CarryHostage(long costValue, Matrix matrix) {
-        super(costValue, matrix);
+        super(costValue, matrix, );
     }
 
     @Override
@@ -61,7 +61,7 @@ public class CarryHostage extends Operator {
 
             // check if Neo carry max number of hostages
             int numHostagesCarried = getCarriedHostagesNumber(isCarriedHostage);
-            if (numHostagesCarried == currentMatrixProblem.maxCarriedHostages) {
+            if (numHostagesCarried == currentMatrixProblem.maxCarry) {
                 return false;
             }
 

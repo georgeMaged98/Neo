@@ -6,9 +6,10 @@ public abstract class Operator {
 
     private Matrix matrix;
 
-    public Operator(long costValue,Matrix matrix){
+    public Operator(long costValue, Matrix matrix, String name){
         this.costValue = costValue;
         this.matrix = matrix;
+        this.name=name;
     }
 
     public Matrix getMatrix() {

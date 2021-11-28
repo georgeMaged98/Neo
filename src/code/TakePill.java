@@ -3,7 +3,7 @@ package code;
 public class TakePill extends Operator{
 
     public TakePill(long costValue, Matrix matrix) {
-        super(costValue, matrix);
+        super(costValue, matrix, );
     }
 
     @Override

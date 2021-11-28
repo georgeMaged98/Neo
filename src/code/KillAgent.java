@@ -3,18 +3,18 @@ package code;
 public class KillAgent extends Operator {
 
     public KillAgent(long costValue, Matrix matrix) {
-        super(costValue, matrix);
+        super(costValue, matrix, );
     }
 
     @Override
     public StateObject apply(StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
-        boolean[] isAgentKilled = currentStateObject.isAgentKilled;
-        boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
-        boolean[] isHostageCarried = currentStateObject.isHostageCarried;
-        boolean[] isHostageRescued = currentStateObject.isRescuedHostage;
-        int[] hostageDamage = currentStateObject.hostageDamage;
+        Pos neoPos = currentStateObject.getNeoPos();
+        boolean[] isAgentKilled = currentStateObject.getIsAgentKilled();
+        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
+        boolean[] isHostageCarried = currentStateObject.getIsHostageCarried();
+        boolean[] isHostageRescued = currentStateObject.getIsRescuedHostage();
+        int[] hostageDamage = currentStateObject.getHostageDamage();
 
         Matrix currentMatrixProblem = this.getMatrix();
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter
@@ -55,7 +55,7 @@ public class KillAgent extends Operator {
         boolean[] isAgentKilled = currentStateObject.isAgentKilled;
         boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
         boolean[] isHostageCarried = currentStateObject.isHostageCarried;
-        boolean[] isHostageRescued = currentStateObject.isRescuedHostage;
+        boolean[] isHostageRescued = currentStateObject.getIsRescuedHostage();
         int[] hostageDamage = currentStateObject.hostageDamage;
 
         Matrix currentMatrixProblem = this.getMatrix();
@@ -69,12 +69,12 @@ public class KillAgent extends Operator {
         if (neoPos.x - 1 >= 0)
             leftCell = containsAgent(grid, neoPos.x - 1, neoPos.y, isAgentKilled) || containsTurnedAgent(grid, neoPos.x - 1, neoPos.y, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
-        if (neoPos.x + 1 <= currentMatrixProblem.dim_x)
+        if (neoPos.x + 1 <= currentMatrixProblem.width)
             rightCell = containsAgent(grid, neoPos.x + 1, neoPos.y, isAgentKilled) || containsTurnedAgent(grid, neoPos.x + 1, neoPos.y, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
         if (neoPos.y - 1 >= 0)
             downCell = containsAgent(grid, neoPos.x, neoPos.y - 1, isAgentKilled) || containsTurnedAgent(grid, neoPos.x, neoPos.y - 1, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
-        if (neoPos.y <= currentMatrixProblem.dim_y)
+        if (neoPos.y <= currentMatrixProblem.height)
             upCell = containsAgent(grid, neoPos.x, neoPos.y + 1, isAgentKilled) || containsTurnedAgent(grid, neoPos.x, neoPos.y + 1, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
         if (leftCell || rightCell || upCell || downCell)

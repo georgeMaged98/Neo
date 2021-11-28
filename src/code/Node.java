@@ -8,7 +8,7 @@ public class Node {
     private Operator operator;
     private int depth;
     private int nKills;
-    private int nRescued;
+    private int nDeathes;
     private long pathCost;
 
     public int getnKills() {
@@ -19,12 +19,12 @@ public class Node {
         this.nKills = nKills;
     }
 
-    public int getnRescued() {
-        return nRescued;
+    public int getnDeathes() {
+        return nDeathes;
     }
 
-    public void setnRescued(int nRescued) {
-        this.nRescued = nRescued;
+    public void setnDeathes(int nDeathes) {
+        this.nDeathes = nDeathes;
     }
 
     public Node(State state, Node parentNode, Operator operator) {

@@ -3,6 +3,10 @@ package code;
 import java.util.ArrayList;
 
 public class State {
+    public String getData() {
+        return data;
+    }
+
     private String data;
 
     public State(StateObject stateObject) {

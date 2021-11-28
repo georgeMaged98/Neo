@@ -3,7 +3,7 @@ package code;
 public class MoveLeft extends Operator{
 
     public MoveLeft(long costValue, Matrix matrix) {
-        super(costValue, matrix);
+        super(costValue, matrix, );
     }
 
     @Override

@@ -1,10 +1,18 @@
 package code;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public abstract class SearchProcedure { // To be named strategy
 	
 	protected SearchProblem problem;
+	private HashSet<String>stateSet=new HashSet<>();
+
+	public int getnExpandedNodes() {
+		return nExpandedNodes;
+	}
+
+	int nExpandedNodes=0;
 
 	public abstract void enqueue(Node node);
 
@@ -22,21 +30,34 @@ public abstract class SearchProcedure { // To be named strategy
 			Node node = dequeue();
 
 			State currentState = node.getState();
-			StateObject stateObject=currentState.getStateObject();
+			stateSet.add(currentState.getData());
+			/*
+			todo may change the string
+			 */
 			ArrayList<Operator> operators = problem.getOperators();
 			if (problem.goalTest(currentState))
 				return node;
-			
+			nExpandedNodes++;
 			for(Operator operator : operators) {
-				// check for valid opertaors
+			StateObject stateObject=currentState.getStateObject();
 
-				// Check for duplicate states
-				
+				// check for valid opertaors
+				if(!operator.isActionDoable(node,stateObject))
+					continue;
+
 				// expand node
-				//		operator.apply(node,stateObject);
 				// nextTimeStep -> health(neo hostage)-- node transformation //make sure neo health
-				Node expandedNode = operator.apply(node,stateObject);
-				enqueue(expandedNode);
+				StateObject expandedStateObject = operator.apply(stateObject);
+				// apply next time step on expandedStateObject
+
+				// create newstate
+				State newState=new State(stateObject);
+				// Check for duplicate states
+				if(stateSet.contains(newState.getData()))
+					continue;
+
+
+			//	enqueue(expandedNode);
 				
 			}
 		}

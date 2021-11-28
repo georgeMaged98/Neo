@@ -2,8 +2,8 @@ package code;
 
 public class Fly  extends Operator{
 
-    public Fly(long costValue, Matrix matrix) {
-        super(costValue, matrix);
+    public Fly(long costValue, Matrix matrix,String name) {
+        super(costValue, matrix, name);
     }
 
     @Override
