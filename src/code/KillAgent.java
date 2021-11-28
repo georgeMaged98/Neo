@@ -18,11 +18,11 @@ public class KillAgent extends Operator {
     @Override
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
-        boolean[] isAgentKilled = currentStateObject.isAgentKilled;
-        boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
-        boolean[] isHostageCarried = currentStateObject.isHostageCarried;
-        boolean[] isHostageRescued = currentStateObject.isRescuedHostage;
+        Pos neoPos = currentStateObject.getNeoPos();
+        boolean[] isAgentKilled = currentStateObject.getIsAgentKilled();
+        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
+        boolean[] isHostageCarried = currentStateObject.getIsHostageCarried();
+        boolean[] isHostageRescued = currentStateObject.getIsRescuedHostage();
 
         Matrix currentMatrixProblem = this.getMatrix();
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter

@@ -2,15 +2,44 @@ package code;
 
 public class StateObject {
     Pos neoPos;
-    boolean[] isAgentKilled;
-    int[] hostageDamage;
-    boolean[] isHostageCarried;
-    boolean[] isTurnedAgent;
-    boolean[] isPillTaken;
-    boolean[] isRescuedHostage;
-    int nKills;
-    int nRescued;
-    int neoDamage;
+     boolean[] isAgentKilled;
+     int[] hostageDamage;
+     boolean[] isHostageCarried;
+     boolean[] isTurnedAgent;
+     boolean[] isPillTaken;
+    private boolean[] isRescuedHostage;
+    private int nKills;
+    private int nRescued;
+    private int neoDamage;
+    public Pos getNeoPos() {
+        return neoPos;
+    }
+
+    public boolean[] getIsAgentKilled() {
+        return isAgentKilled;
+    }
+
+    public int[] getHostageDamage() {
+        return hostageDamage;
+    }
+
+    public boolean[] getIsHostageCarried() {
+        return isHostageCarried;
+    }
+
+    public boolean[] getIsTurnedAgent() {
+        return isTurnedAgent;
+    }
+
+    public boolean[] getIsPillTaken() {
+        return isPillTaken;
+    }
+
+    public boolean[] getIsRescuedHostage() {
+        return isRescuedHostage;
+    }
+
+
 
     public void setNeoPos(Pos neoPos) {
         this.neoPos = neoPos;

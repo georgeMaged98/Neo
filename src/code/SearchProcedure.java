@@ -28,14 +28,14 @@ public abstract class SearchProcedure { // To be named strategy
 				return node;
 			
 			for(Operator operator : operators) {
-				// Check for valid operators
-				
+				// check for valid opertaors
+
 				// Check for duplicate states
 				
 				// expand node
-		//		operator.apply(node,stateObject);
-
-				Node expandedNode = operator.apply(node);
+				//		operator.apply(node,stateObject);
+				// nextTimeStep -> health(neo hostage)-- node transformation //make sure neo health
+				Node expandedNode = operator.apply(node,stateObject);
 				enqueue(expandedNode);
 				
 			}

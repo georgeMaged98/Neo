@@ -15,10 +15,10 @@ public class MoveDown extends Operator{
     @Override
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
-        Pos neoPos = currentStateObject.neoPos;
+        Pos neoPos = currentStateObject.getNeoPos();
 
-        boolean[] isAgentKilled = currentStateObject.isAgentKilled;
-        boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
+        boolean[] isAgentKilled = currentStateObject.getIsAgentKilled();
+        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
         Matrix currentMatrixProblem = this.getMatrix();
 
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter
