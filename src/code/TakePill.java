@@ -7,12 +7,43 @@ public class TakePill extends Operator{
     }
 
     @Override
-    public Node apply(Node node, StateObject currentStateObject) {
-        // increase Neo's health by 20
+    public StateObject apply(StateObject currentStateObject) {
 
-        // decrease damage for all hostages by 20
+        Pos neoPos = currentStateObject.neoPos;
+        int neoDamage = currentStateObject.getNeoDamage();
+        boolean[] isPillTaken = currentStateObject.isPillTaken;
+        boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
 
-        return null;
+        Matrix currentMatrixProblem = this.getMatrix();
+
+        GridElement[][] grid = currentMatrixProblem.grid; // change to getter
+        GridElement currentCell = grid[neoPos.x][neoPos.y];
+        int pillIdx = currentCell.index;
+
+        // decrease Neo's damage by 20
+        neoDamage-= 20;
+        currentStateObject.setNeoDamage(neoDamage);
+        if (currentStateObject.getNeoDamage() < 0)
+            currentStateObject.setNeoDamage(0);
+
+        // decrease damage for all ALIVE hostages by 22
+        int[] hostageDamage = currentStateObject.hostageDamage;
+        for (int i=0;i<hostageDamage.length;i++){
+            // Decrease the damage to hostages which are either in place or carried.
+            // -> The hostage should not be a turned agent and its damage should be less than 100
+            if (!isTurnedAgent[i] && hostageDamage[i] < 100){
+                hostageDamage[i] -= 22;
+                if(hostageDamage[i] < 0)
+                    hostageDamage[i] = 0;
+            }
+        }
+        currentStateObject.setHostageDamage(hostageDamage);
+
+        // change pill to be taken
+        isPillTaken[pillIdx] = true;
+        currentStateObject.setIsPillTaken(isPillTaken);
+
+        return currentStateObject;
     }
 
     @Override
@@ -26,10 +57,11 @@ public class TakePill extends Operator{
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
+        // check if there is a pill in the current cell
         if(currentCell.matrixObject == MatrixObject.PILL && !isPillTaken[currentCell.index]){
             return  true;
         }
-        // check if there is a pill in the current cell
+
         return false;
     }
 }

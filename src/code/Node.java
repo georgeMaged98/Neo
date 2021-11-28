@@ -3,10 +3,12 @@ package code;
 public class Node {
 
     private State state;
-    // every node will not deleted because its children reference to it big Memory
+    // every node will not be deleted because its children reference to it big Memory
     private Node parentNode;
     private Operator operator;
     private int depth;
+    private int nKills;
+    private int nRescued;
     private long pathCost;
 
     public int getnKills() {
@@ -24,10 +26,6 @@ public class Node {
     public void setnRescued(int nRescued) {
         this.nRescued = nRescued;
     }
-
-    private int nKills;
-    private int nRescued;
-
 
     public Node(State state, Node parentNode, Operator operator) {
         this.state = state;

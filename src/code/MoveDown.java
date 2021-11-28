@@ -7,9 +7,11 @@ public class MoveDown extends Operator{
     }
 
     @Override
-    public Node apply(Node node, StateObject currentStateObject) {
+    public StateObject apply(StateObject currentStateObject) {
+
         // y -> y-1
-        return null;
+        currentStateObject.neoPos.y -= 1;
+        return currentStateObject;
     }
 
     @Override
@@ -19,13 +21,14 @@ public class MoveDown extends Operator{
 
         boolean[] isAgentKilled = currentStateObject.isAgentKilled;
         boolean[] isTurnedAgent = currentStateObject.isTurnedAgent;
+
         Matrix currentMatrixProblem = this.getMatrix();
 
         GridElement[][] grid = currentMatrixProblem.grid; // change to getter
-        GridElement downCell = grid[neoPos.x][neoPos.y + 1];
+        GridElement downCell = grid[neoPos.x][neoPos.y - 1];
 
         // check if Neo is not facing a wall
-        if(neoPos.y + 1 == currentMatrixProblem.dim_y){
+        if(neoPos.y - 1 == -1){
             return false;
         }
 
@@ -35,11 +38,10 @@ public class MoveDown extends Operator{
         }
 
         // check if the down cell contains hostage which is turned to agent
-        if(downCell.matrixObject == MatrixObject.HOSTAGE && !isTurnedAgent[downCell.index]){
+        if(downCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[downCell.index]){
             return false;
         }
 
-        // return true
         return true;
 
     }

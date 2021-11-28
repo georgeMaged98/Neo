@@ -23,7 +23,7 @@ public abstract class Operator {
         this.name = name;
     }
 
-    public abstract Node apply(Node node, StateObject currentStateObject);
+    public abstract StateObject apply( StateObject currentStateObject);
 
     public abstract boolean isActionDoable(Node node, StateObject currentStateObject); // change to boolean ??
 
