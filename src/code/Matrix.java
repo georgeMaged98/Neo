@@ -35,7 +35,7 @@ public class Matrix extends SearchProblem {
     }
     public void initializeOperator(){
         ArrayList<Operator>operators=new ArrayList<>();
-        operators.add(new CarryHostage(0,this));
+        operators.add(new CarryHostage(0,this, name));
         operators.add(new DropHostage(0,this));
         operators.add(new TakePill(0,this));
         operators.add(new KillAgent(0,this));

@@ -11,6 +11,7 @@ public class StateObject {
     private int nKills;
     private int nRescued;
     private int neoDamage;
+
     public Pos getNeoPos() {
         return neoPos;
     }
@@ -38,7 +39,6 @@ public class StateObject {
     public boolean[] getIsRescuedHostage() {
         return isRescuedHostage;
     }
-
 
 
     public void setNeoPos(Pos neoPos) {

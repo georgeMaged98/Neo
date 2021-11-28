@@ -2,8 +2,8 @@ package code;
 
 public class CarryHostage extends Operator {
 
-    public CarryHostage(long costValue, Matrix matrix) {
-        super(costValue, matrix, );
+    public CarryHostage(long costValue, Matrix matrix, String name) {
+        super(costValue, matrix, name);
     }
 
     @Override
@@ -29,10 +29,10 @@ public class CarryHostage extends Operator {
     public boolean isActionDoable(Node node, StateObject currentStateObject) {
 
 
-        Pos neoPos = currentStateObject.neoPos;
-        boolean[] isCarriedHostage = currentStateObject.isHostageCarried;
-        boolean[]  isTurnedAgent = currentStateObject.isTurnedAgent;
-        boolean[] isRescuedHostage = currentStateObject.isRescuedHostage;
+        Pos neoPos = currentStateObject.getNeoPos();
+        boolean[] isCarriedHostage = currentStateObject.getIsHostageCarried();
+        boolean[]  isTurnedAgent = currentStateObject.getIsTurnedAgent();
+        boolean[] isRescuedHostage = currentStateObject.getIsRescuedHostage();
 
 
         Matrix currentMatrixProblem = this.getMatrix();
