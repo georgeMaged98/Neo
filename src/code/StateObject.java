@@ -1,6 +1,7 @@
 package code;
 
 public class StateObject {
+
     private Pos neoPos;
     private boolean[] isAgentKilled;
     private int[] hostageDamage;
@@ -25,30 +26,46 @@ public class StateObject {
         return isPillTaken.length;
     }
 
-    public boolean isHostageKilled(int idx) {
+    public boolean checkAgentKilled(int idx){
+        return isAgentKilled[idx];
+    }
+    
+    public boolean checkHostageKilled(int idx) {
         return hostageDamage[idx] == -1;
     }
-
-    public boolean isHostageDeadCarried(int idx) {
-        return !isTurnedAgent[idx] && hostageDamage[idx] == 100;
-
+    
+    public int getCarriedHostagesNum(){
+        int count = 0;
+        for (int i = 0; i < isHostageCarried.length; i++) {
+            if (isHostageCarried[i])
+                count++;
+        }
+        return count;
     }
-    public boolean isNeoDead(){
+
+    // TODO ?????????????????????????????????????????????????????????????????????????????????
+    public boolean checkHostageDeadCarried(int idx) {
+        return !isTurnedAgent[idx] && hostageDamage[idx] == 100;
+    }
+    
+    public boolean checkNeoDead(){
         return neoDamage>=100;
     }
-    public boolean isHostageTurned(int idx) {
-        return isTurnedAgent[idx];
-    }
 
-    public boolean isHostageRescued(int idx){
+    public boolean checkHostageRescued(int idx){
         return isRescuedHostage[idx];
     }
 
-    public boolean isHostageRescuedOrKilled(int idx){
-        return isHostageRescued(idx)||isHostageKilled(idx);
+    public boolean checkHostageRescuedOrKilled(int idx){
+        return checkHostageRescued(idx)|| checkHostageKilled(idx);
     }
 
-    public boolean isAgentTurned(int idx) {
+    public boolean checkHostageCarried(int idx) {
+        return isHostageCarried[idx];
+    }
+
+
+    public boolean checkAgentTurned(int idx) {
         return isTurnedAgent[idx];
     }
 
@@ -61,7 +78,7 @@ public class StateObject {
     }
 
     public void updateHostageDamage(int idx, int addedDamage) {
-        if (!isRescuedHostage[idx] && !isTurnedAgent[idx]&&!isHostageDeadCarried(idx)) {
+        if (!isRescuedHostage[idx] && !isTurnedAgent[idx]&&!checkHostageDeadCarried(idx)) {
             hostageDamage[idx] += addedDamage;
             if (hostageDamage[idx] >= 100) {
                 nDeaths++;
@@ -147,5 +164,119 @@ public class StateObject {
         this.neoDamage = neoDamage;
     }
 
+    public void moveNeoRight(){
+        neoPos.x++;
+    }
 
+    public void moveNeoLeft(){
+        neoPos.x--;
+    }
+
+    public void moveNeoUp(){
+        neoPos.y++;
+    }
+
+    public void moveNeoDown(){
+        neoPos.y--;
+    }
+
+
+    public boolean cellContainsAliveAgent(GridElement cell) {
+        MatrixObject matrixObject = cell.matrixObject;
+        int idx = cell.index;
+
+        return matrixObject == MatrixObject.AGENT && !checkAgentKilled(idx);
+    }
+
+    public boolean cellContainsTurnedAliveAgent(GridElement cell) {
+        MatrixObject matrixObject = cell.matrixObject;
+        int idx = cell.index;
+
+        if (matrixObject == MatrixObject.HOSTAGE && checkAgentTurned(idx) && !checkHostageKilled(idx)) {
+            return true;
+        }
+        return false;
+    }
+
+    // hostage should be NOT turned and NOT dead carried and NOT currently carried.
+    public boolean cellContainsAliveHostage(GridElement cell) {
+        MatrixObject matrixObject = cell.matrixObject;
+        int idx = cell.index;
+
+        return matrixObject == MatrixObject.HOSTAGE && !checkAgentTurned(idx) && !checkHostageDeadCarried(idx) && !checkHostageCarried(idx);
+    }
+
+    public boolean cellContainsPill(GridElement cell){
+        MatrixObject matrixObject = cell.matrixObject;
+        int idx = cell.index;
+
+        return matrixObject == MatrixObject.PILL && !isPillTaken[idx];
+    }
+
+    public void takePill(int idx){
+
+        // decrease Neo's damage by 20 not less than 0
+        neoDamage -= 20;
+        if(neoDamage < 0)
+            neoDamage = 0;
+
+        // decrease damage for alive hostages by 22 to compensate for timestep increase by 2
+        for (int i = 0; i < hostageDamage.length; i++) {
+            if(checkHostageAlive(i)){
+                hostageDamage[i] -= 22;
+                if(hostageDamage[i] < 0)
+                    hostageDamage[i] = 0;
+            }
+        }
+
+        // change pill to be taken
+        isPillTaken[idx] = true;
+    }
+
+    private boolean checkHostageAlive(int idx) {
+        return !checkAgentTurned(idx) && !checkHostageRescued(idx) && !checkHostageDeadCarried(idx);
+    }
+
+    public void carryHostage(int idx){
+        isHostageCarried[idx] = true;
+    }
+
+    // UnCarry hostage and mark it as rescued.
+    public void dropAllHostages(){
+        for (int i = 0; i < isHostageCarried.length; i++) {
+            if(isHostageCarried[i]){
+                isHostageCarried[i] = false;
+                isRescuedHostage[i] = true;
+            }
+        }
+    }
+
+    public void killAgent(GridElement cell){
+        int idx = cell.index;
+        isAgentKilled[idx] = true;
+        nDeaths++;
+    }
+
+
+    public void killTurnedAgent(GridElement cell){
+        int idx = cell.index;
+        hostageDamage[idx] = -1;
+        nDeaths++;
+    }
+
+    public void increaseNeoDamageBy20(){
+        neoDamage +=20;
+    }
+
+    public void flyNeo(GridElement cell, Matrix matrix){
+
+        int idx = cell.index;
+        neoPos  = matrix.getFinishPadPos()[idx];
+    }
+
+    public boolean cellContainsPad(GridElement cell){
+
+        MatrixObject matrixObject = cell.matrixObject;
+        return matrixObject == MatrixObject.PAD;
+    }
 }

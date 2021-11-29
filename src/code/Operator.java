@@ -24,9 +24,9 @@ public abstract class Operator {
         this.name = name;
     }
 
-    public abstract StateObject apply( StateObject currentStateObject);
+    public abstract void apply( StateObject currentStateObject);
 
-    public abstract boolean isActionDoable(Node node, StateObject currentStateObject); // change to boolean ??
+    public abstract boolean isActionDoable(StateObject currentStateObject); // change to boolean ??
 
     public long getCostValue() {
         return costValue;

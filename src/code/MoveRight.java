@@ -7,40 +7,27 @@ public class MoveRight extends Operator {
     }
 
     @Override
-    public StateObject apply(StateObject currentStateObject) {
-
+    public void apply(StateObject currentStateObject) {
         // change x to x+1
-        currentStateObject.getNeoPos().x += 1;
-
-        return currentStateObject;
+        currentStateObject.moveNeoRight();
     }
 
     @Override
-    public boolean isActionDoable(Node node, StateObject currentStateObject) {
-
+    public boolean isActionDoable(StateObject currentStateObject) {
         Pos neoPos = currentStateObject.getNeoPos();
 
         Matrix currentMatrixProblem = this.getMatrix();
 
         // check if Neo is not facing a wall
-        if (neoPos.x + 1 == currentMatrixProblem.getWidth()) {
-            return false;
-        }
+        if (currentMatrixProblem.isPosBeyondBorders(neoPos.x + 1, neoPos.y)) return false;
 
-        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
-        GridElement rightCell = grid[neoPos.x + 1][neoPos.y];
-
-        int rightCellIdx = rightCell.index;
-
+        GridElement rightCell = currentMatrixProblem.getGridElement(neoPos.x + 1, neoPos.y);
         // check if the right cell contains agent which is not killed
-        if (rightCell.matrixObject == MatrixObject.AGENT && currentStateObject.isAgentTurned(rightCellIdx)) {
-            return false;
-        }
+        if (currentStateObject.cellContainsAliveAgent(rightCell))  return false;
 
-        // check if the right cell contains hostage which is turned to agent
-        if (rightCell.matrixObject == MatrixObject.HOSTAGE && currentStateObject.isHostageTurned(rightCellIdx)) return false;
+        // check if the right cell contains hostage which is turned to agent and not yet killed
+        if(currentStateObject.cellContainsTurnedAliveAgent(rightCell)) return false;
 
         return true;
-
     }
 }

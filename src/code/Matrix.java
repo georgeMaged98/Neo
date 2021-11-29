@@ -68,7 +68,7 @@ public class Matrix extends SearchProblem {
         maxCarry = Integer.parseInt(st.nextToken());
         String[] neo = st.nextToken().split(",", -1);
         neoPos = parsePos(neo[0], neo[1]);
-        String[] telephone = st.nextToken().split(",",-1);
+        String[] telephone = st.nextToken().split(",", -1);
         telephonePos = parsePos(telephone[0], telephone[1]);
         String[] positions = st.nextToken().split(",", -1);
         agentsPos = new Pos[positions.length / 2];
@@ -81,21 +81,23 @@ public class Matrix extends SearchProblem {
         fillMatrix();
         initializeOperator();
     }
-    public void initializeOperator(){
-        ArrayList<Operator>operators=new ArrayList<>();
-        operators.add(new CarryHostage(0,this, "carry"));
-        operators.add(new DropHostage(0,this, "drop"));
-        operators.add(new TakePill(0,this, "takePill"));
-        operators.add(new KillAgent(0,this, "kill"));
-        operators.add(new Fly(0,this,"fly"));
-        operators.add(new MoveLeft(0,this, "left"));
-        operators.add(new MoveRight(0,this, "right"));
-        operators.add(new MoveDown(0,this, "down"));
-        operators.add(new MoveUp(0,this, "up"));
+
+    public void initializeOperator() {
+        ArrayList<Operator> operators = new ArrayList<>();
+        operators.add(new CarryHostage(0, this, "carry"));
+        operators.add(new DropHostage(0, this, "drop"));
+        operators.add(new TakePill(0, this, "takePill"));
+        operators.add(new KillAgent(0, this, "kill"));
+        operators.add(new Fly(0, this, "fly"));
+        operators.add(new MoveLeft(0, this, "left"));
+        operators.add(new MoveRight(0, this, "right"));
+        operators.add(new MoveDown(0, this, "down"));
+        operators.add(new MoveUp(0, this, "up"));
         setOperators(operators);
     }
+
     public void fillMatrix() {
-        grid=new GridElement[width][height];
+        grid = new GridElement[width][height];
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
                 grid[i][j] = new GridElement(MatrixObject.EMPTY, 0);
@@ -117,8 +119,6 @@ public class Matrix extends SearchProblem {
             Pos pos = hostagePos[i];
             grid[pos.x][pos.y] = new GridElement(MatrixObject.HOSTAGE, i);
         }
-
-
 
 
     }
@@ -157,61 +157,60 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-        String str="5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
-        solve(str,"BF",false);
-
+        String str = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
+        System.out.println(solve(str, "BF", false));
     }
 
-    public boolean isNeoAtTB(StateObject stateObject){
+    public boolean isNeoAtTB(StateObject stateObject) {
         return stateObject.getNeoPos().equals(telephonePos);
     }
+
     public boolean goalTest(State s) {
 
-        StateObject stateObject= s.getStateObject();
+        StateObject stateObject = s.getStateObject();
         for (int i = 0; i < hostagePos.length; i++)
-            if(!stateObject.isHostageRescuedOrKilled(i))
+            if (!stateObject.checkHostageRescuedOrKilled(i))
                 return false;
 
         return isNeoAtTB(stateObject);
     }
 
 
-
     public static String solve(String grid, String strategy, boolean visualize) {
-        Matrix matrix=new Matrix(grid);
-        SearchProcedure searchProcedure=null;
-        if(strategy.equals("BF"))
-             searchProcedure=new BFS(matrix);
+        Matrix matrix = new Matrix(grid);
+        SearchProcedure searchProcedure = null;
+        if (strategy.equals("BF"))
+            searchProcedure = new BFS(matrix);
         // create node -initialState -
-        StateObject stateObject=new StateObject();
+        StateObject stateObject = new StateObject();
         matrix.fillStateObject(stateObject);
-        State initialState=new State(stateObject);
-        Node initialNode=new Node(initialState,null,null);
+        State initialState = new State(stateObject);
+        Node initialNode = new Node(initialState, null, null);
 
-        Node answer=searchProcedure.search(initialNode);
+        Node answer = searchProcedure.search(initialNode);
 
-        int nNodes=searchProcedure.getnExpandedNodes();
-        return prepareOutput(answer,nNodes);
+        int nNodes = searchProcedure.getnExpandedNodes();
+        return prepareOutput(answer, nNodes);
     }
 
-    public  static String prepareOutput(Node goal,int nNodes){
+    public static String prepareOutput(Node goal, int nNodes) {
         // plan --> deaths--> kills --> Nodes
-        Node node=goal;
-        ArrayList<String>ans=new ArrayList<>();
-        while (node.getParentNode()!=null){
+        Node node = goal;
+        ArrayList<String> ans = new ArrayList<>();
+        while (node.getParentNode() != null) {
             ans.add(node.getOperator().getName());
-            node=node.getParentNode();
+            node = node.getParentNode();
         }
-        String plan=State.mergeArray(ans,",");
-        ans=new ArrayList<>();
+        String plan = State.mergeArray(ans, ",");
+        ans = new ArrayList<>();
         ans.add(plan);
-        ans.add(node.getnDeathes()+"");
-        ans.add(node.getnKills()+"");
-        ans.add(nNodes+"");
-        return State.mergeArray(ans,";");
+        ans.add(node.getnDeathes() + "");
+        ans.add(node.getnKills() + "");
+        ans.add(nNodes + "");
+        return State.mergeArray(ans, ";");
     }
 
-    private  void fillStateObject(StateObject stateObject){
+    private void fillStateObject(StateObject stateObject) {
         stateObject.setNeoPos(neoPos);
         stateObject.setIsAgentKilled(new boolean[agentsPos.length]);
         stateObject.setHostageDamage(hostageDamage);
@@ -223,6 +222,14 @@ public class Matrix extends SearchProblem {
         stateObject.setnDeaths(0);
         stateObject.setNeoDamage(0);
 
+    }
+
+    public GridElement getGridElement(int x, int y) {
+        return this.grid[x][y];
+    }
+
+    public boolean isPosBeyondBorders(int x, int y) {
+        return x == -1 || y == -1 || x == width || y == height;
     }
 
 }

@@ -31,7 +31,7 @@ public abstract class SearchProcedure { // To be named strategy
         Node outputNode = new Node(state, node, operator);
         outputNode.setnDeathes(stateObject.getnDeaths());
         outputNode.setnKills(stateObject.getnKills());
-        if (stateObject.isNeoDead())
+        if (stateObject.checkNeoDead())
             return null;
         return outputNode;
 
@@ -65,7 +65,7 @@ public abstract class SearchProcedure { // To be named strategy
                 StateObject stateObject = currentState.getStateObject();
 
                 // check for valid operators
-                if (!operator.isActionDoable(node, stateObject))
+                if (!operator.isActionDoable(stateObject))
                     continue;
 
                 operator.apply(stateObject);
