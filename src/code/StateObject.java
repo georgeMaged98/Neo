@@ -36,8 +36,8 @@ public class StateObject {
     
     public int getCarriedHostagesNum(){
         int count = 0;
-        for (int i = 0; i < isHostageCarried.length; i++) {
-            if (isHostageCarried[i])
+        for (boolean isCarried:isHostageCarried) {
+            if (isCarried)
                 count++;
         }
         return count;
@@ -254,14 +254,14 @@ public class StateObject {
     public void killAgent(GridElement cell){
         int idx = cell.index;
         isAgentKilled[idx] = true;
-        nDeaths++;
+        nKills++;
     }
 
 
     public void killTurnedAgent(GridElement cell){
         int idx = cell.index;
         hostageDamage[idx] = -1;
-        nDeaths++;
+        nKills++;
     }
 
     public void increaseNeoDamageBy20(){
