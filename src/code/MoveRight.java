@@ -20,9 +20,6 @@ public class MoveRight extends Operator {
 
         Pos neoPos = currentStateObject.getNeoPos();
 
-        boolean[] isAgentKilled = currentStateObject.getIsAgentKilled();
-        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
-
         Matrix currentMatrixProblem = this.getMatrix();
 
         // check if Neo is not facing a wall
@@ -33,17 +30,15 @@ public class MoveRight extends Operator {
         GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         GridElement rightCell = grid[neoPos.x + 1][neoPos.y];
 
+        int rightCellIdx = rightCell.index;
 
         // check if the right cell contains agent which is not killed
-        if (rightCell.matrixObject == MatrixObject.AGENT && !isAgentKilled[rightCell.index]) {
+        if (rightCell.matrixObject == MatrixObject.AGENT && currentStateObject.isAgentTurned(rightCellIdx)) {
             return false;
         }
 
         // check if the right cell contains hostage which is turned to agent
-        int rightCellIdx = rightCell.index;
-        if (rightCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[rightCellIdx]) {
-            return false;
-        }
+        if (rightCell.matrixObject == MatrixObject.HOSTAGE && currentStateObject.isHostageTurned(rightCellIdx)) return false;
 
         return true;
 

@@ -39,13 +39,18 @@ public class StateObject {
     public boolean isHostageTurned(int idx) {
         return isTurnedAgent[idx];
     }
+
     public boolean isHostageRescued(int idx){
         return isRescuedHostage[idx];
     }
+
     public boolean isHostageRescuedOrKilled(int idx){
         return isHostageRescued(idx)||isHostageKilled(idx);
     }
 
+    public boolean isAgentTurned(int idx) {
+        return isTurnedAgent[idx];
+    }
 
     public Pos getNeoPos() {
         return neoPos;
@@ -141,4 +146,6 @@ public class StateObject {
     public void setNeoDamage(int neoDamage) {
         this.neoDamage = neoDamage;
     }
+
+
 }
