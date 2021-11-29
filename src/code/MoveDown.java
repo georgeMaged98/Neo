@@ -1,6 +1,6 @@
 package code;
 
-public class MoveDown extends Operator{
+public class MoveDown extends Operator {
 
     public MoveDown(long costValue, Matrix matrix, String name) {
         super(costValue, matrix, name);
@@ -25,7 +25,7 @@ public class MoveDown extends Operator{
         Matrix currentMatrixProblem = this.getMatrix();
 
         // check if Neo is not facing a wall
-        if(neoPos.y - 1 == -1){
+        if (neoPos.y - 1 == -1) {
             return false;
         }
 
@@ -34,12 +34,12 @@ public class MoveDown extends Operator{
 
 
         // check if the down cell contains agent which is not killed
-        if(downCell.matrixObject == MatrixObject.AGENT && !isAgentKilled[downCell.index]){
+        if (downCell.matrixObject == MatrixObject.AGENT && !isAgentKilled[downCell.index]) {
             return false;
         }
 
         // check if the down cell contains hostage which is turned to agent
-        if(downCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[downCell.index]){
+        if (downCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[downCell.index] && !currentStateObject.isHostageKilled(downCell.index)) {
             return false;
         }
 

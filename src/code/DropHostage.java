@@ -39,6 +39,6 @@ public class DropHostage  extends Operator{
 
         // Neo must be in the same cell as TB.
 
-        return currentCell.matrixObject == MatrixObject.TELEPHONE_BOOTH;
+        return currentCell.matrixObject == MatrixObject.TELEPHONE_BOOTH && currentStateObject.getCarriedHostagesNum() != 0;
     }
 }

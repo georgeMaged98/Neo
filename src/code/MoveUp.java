@@ -40,7 +40,7 @@ public class MoveUp extends Operator {
 
         // check if the up cell contains hostage which is turned to agent
         int upCellIdx = upCell.index;
-        if (upCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[upCellIdx]) {
+        if (upCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[upCellIdx] && !currentStateObject.isHostageKilled(upCell.index)) {
             return false;
         }
 

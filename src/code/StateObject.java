@@ -28,7 +28,14 @@ public class StateObject {
     public boolean isHostageKilled(int idx) {
         return hostageDamage[idx] == -1;
     }
-
+    public int getCarriedHostagesNum(){
+        int count = 0;
+        for (int i = 0; i < isHostageCarried.length; i++) {
+            if (isHostageCarried[i])
+                count++;
+        }
+        return count;
+    }
     public boolean isHostageDeadCarried(int idx) {
         return !isTurnedAgent[idx] && hostageDamage[idx] == 100;
 

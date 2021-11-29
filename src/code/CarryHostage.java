@@ -31,7 +31,7 @@ public class CarryHostage extends Operator {
 
         Pos neoPos = currentStateObject.getNeoPos();
         boolean[] isCarriedHostage = currentStateObject.getIsHostageCarried();
-        boolean[]  isTurnedAgent = currentStateObject.getIsTurnedAgent();
+        boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
         boolean[] isRescuedHostage = currentStateObject.getIsRescuedHostage();
 
 
@@ -42,34 +42,31 @@ public class CarryHostage extends Operator {
 
         // check if there is an un-carried hostage in the current cell
         boolean hostageExists = currentCell.matrixObject == MatrixObject.HOSTAGE;
-        if (hostageExists) {
+        if (!hostageExists) return false;
 
-            // check if it is a turned agent
-            if(isTurnedAgent[currentCell.index]){
-                return false;
-            }
-            // check if the hostage is rescued
-            if (isRescuedHostage[currentCell.index]){
-                return false;
-            }
-
-            // check if hostage is already carried
-            boolean isHostageCarried = isCarriedHostage[currentCell.index];
-            if (isHostageCarried) {
-                return false;
-            }
-
-            // check if Neo carry max number of hostages
-            int numHostagesCarried = getCarriedHostagesNumber(isCarriedHostage);
-            if (numHostagesCarried == currentMatrixProblem.getMaxCarry()) {
-                return false;
-            }
-
-            // passes all cases
-            return  true;
+        // check if it is a turned agent
+        if (isTurnedAgent[currentCell.index]) {
+            return false;
+        }
+        // check if the hostage is rescued
+        if (isRescuedHostage[currentCell.index]) {
+            return false;
         }
 
-        return false;
+        // check if hostage is already carried
+        boolean isHostageCarried = isCarriedHostage[currentCell.index];
+        if (isHostageCarried) {
+            return false;
+        }
+
+        // check if Neo carry max number of hostages
+        int numHostagesCarried = getCarriedHostagesNumber(isCarriedHostage);
+        if (numHostagesCarried == currentMatrixProblem.getMaxCarry()) {
+            return false;
+        }
+
+        // passes all cases
+          return  true;
     }
 
     public static int getCarriedHostagesNumber(boolean[] isCarriedHostage) {

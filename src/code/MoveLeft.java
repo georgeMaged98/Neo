@@ -40,7 +40,7 @@ public class MoveLeft extends Operator{
 
         // check if the left cell contains hostage which is turned to agent
         int leftCellIdx = leftCell.index;
-        if(leftCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[leftCellIdx]){
+        if(leftCell.matrixObject == MatrixObject.HOSTAGE && isTurnedAgent[leftCellIdx] && !currentStateObject.isHostageKilled(leftCell.index)){
             return false;
         }
 
