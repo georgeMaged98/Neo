@@ -25,13 +25,14 @@ public class MoveRight extends Operator {
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
-        GridElement rightCell = grid[neoPos.x + 1][neoPos.y];
-
         // check if Neo is not facing a wall
         if (neoPos.x + 1 == currentMatrixProblem.getWidth()) {
             return false;
         }
+
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
+        GridElement rightCell = grid[neoPos.x + 1][neoPos.y];
+
 
         // check if the right cell contains agent which is not killed
         if (rightCell.matrixObject == MatrixObject.AGENT && !isAgentKilled[rightCell.index]) {

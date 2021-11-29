@@ -24,13 +24,14 @@ public class MoveUp extends Operator {
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
-        GridElement upCell = grid[neoPos.x][neoPos.y + 1];
-
         // check if Neo is not facing a wall
         if (neoPos.y + 1 == currentMatrixProblem.getHeight()) {
             return false;
         }
+
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
+        GridElement upCell = grid[neoPos.x][neoPos.y + 1];
+
 
         // check if the up cell contains agent which is not killed
         if (upCell.matrixObject == MatrixObject.AGENT && !isAgentKilled[upCell.index]) {

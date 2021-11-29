@@ -12,6 +12,19 @@ public class StateObject {
     private int nDeaths;
     private int neoDamage;
 
+    public int getHostagesNum(){
+        return hostageDamage.length;
+    }
+
+
+    public int getAgentsNum(){
+        return isAgentKilled.length;
+    }
+
+    public int getPillsNum(){
+        return isPillTaken.length;
+    }
+
     public boolean isHostageKilled(int idx) {
         return hostageDamage[idx] == -1;
     }

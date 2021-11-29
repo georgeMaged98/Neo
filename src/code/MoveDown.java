@@ -24,13 +24,14 @@ public class MoveDown extends Operator{
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
-        GridElement downCell = grid[neoPos.x][neoPos.y - 1];
-
         // check if Neo is not facing a wall
         if(neoPos.y - 1 == -1){
             return false;
         }
+
+        GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
+        GridElement downCell = grid[neoPos.x][neoPos.y - 1];
+
 
         // check if the down cell contains agent which is not killed
         if(downCell.matrixObject == MatrixObject.AGENT && !isAgentKilled[downCell.index]){

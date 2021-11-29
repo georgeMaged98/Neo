@@ -24,10 +24,11 @@ public class KillAgent extends Operator {
         currentStateObject.setNeoDamage(neoDamage + 20);
 
         // turn neighboring agents to killed
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (containsAgent(grid, neoPos.x + i, neoPos.y + j, isAgentKilled)) {
-                    int agentIndex = grid[i][j].index;
+        for (int i = -1; i < 2; i+=2) {
+            for (int j = -1; j < 2; j+=2) {
+
+                if (!areBeyondBorders(neoPos.x+i, neoPos.y+j, currentMatrixProblem.getWidth(), currentMatrixProblem.getHeight()) && containsAgent(grid, neoPos.x + i, neoPos.y + j, isAgentKilled)) {
+                    int agentIndex = grid[neoPos.x + i][neoPos.y+j].index;
                     isAgentKilled[agentIndex] = true;
                 }
             }
@@ -37,8 +38,8 @@ public class KillAgent extends Operator {
         // turn neighboring turned agents to killed by changing their damage to -1
         for (int i = -1; i < 2; i+=2) {
             for (int j = -1; j < 2; j+=2) {
-                if (containsTurnedAgent(grid,neoPos.x + i, neoPos.y + j, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage)) {
-                    int agentIndex = grid[i][j].index;
+                if (!areBeyondBorders(neoPos.x+i, neoPos.y+j, currentMatrixProblem.getWidth(), currentMatrixProblem.getHeight()) && containsTurnedAgent(grid,neoPos.x + i, neoPos.y + j, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage)) {
+                    int agentIndex = grid[neoPos.x + i][neoPos.y+j].index;
                     hostageDamage[agentIndex] = -1;
                 }
             }
@@ -69,12 +70,12 @@ public class KillAgent extends Operator {
         if (neoPos.x - 1 >= 0)
             leftCell = containsAgent(grid, neoPos.x - 1, neoPos.y, isAgentKilled) || containsTurnedAgent(grid, neoPos.x - 1, neoPos.y, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
-        if (neoPos.x + 1 <= currentMatrixProblem.getWidth())
+        if (neoPos.x + 1 < currentMatrixProblem.getWidth())
             rightCell = containsAgent(grid, neoPos.x + 1, neoPos.y, isAgentKilled) || containsTurnedAgent(grid, neoPos.x + 1, neoPos.y, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
         if (neoPos.y - 1 >= 0)
             downCell = containsAgent(grid, neoPos.x, neoPos.y - 1, isAgentKilled) || containsTurnedAgent(grid, neoPos.x, neoPos.y - 1, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
-        if (neoPos.y <= currentMatrixProblem.getHeight())
+        if (neoPos.y+1 < currentMatrixProblem.getHeight())
             upCell = containsAgent(grid, neoPos.x, neoPos.y + 1, isAgentKilled) || containsTurnedAgent(grid, neoPos.x, neoPos.y + 1, isTurnedAgent, isHostageRescued, isHostageCarried, hostageDamage);
 
         if (leftCell || rightCell || upCell || downCell)
@@ -97,5 +98,9 @@ public class KillAgent extends Operator {
             }
         }
         return false;
+    }
+
+    public static boolean areBeyondBorders(int x, int y, int width, int height){
+        return x == -1 || y == -1 || x == width || y == height;
     }
 }

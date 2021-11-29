@@ -1,52 +1,75 @@
 package code;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class State {
     public String getData() {
         return data;
     }
 
+    @Override
+    public String toString() {
+        return "State{" +
+                "data='" + data + '\'' +
+                ", nHostage=" + nHostage +
+                ", nPills=" + nPills +
+                ", nAgents=" + nAgents +
+                '}';
+    }
+
     private String data;
+    private int nHostage, nPills, nAgents;
 
     public State(StateObject stateObject) {
-        ArrayList<String>ans=new ArrayList<>();
+        nHostage = stateObject.getHostagesNum();
+        nAgents = stateObject.getAgentsNum();
+        nPills = stateObject.getPillsNum();
+
+        ArrayList<String> ans = new ArrayList<>();
         ans.add(getNeoPosString(stateObject));
         ans.add(getKilledAgentsString(stateObject));
         ans.add(getDamageHostagesString(stateObject));
         ans.add(getCarriedHostagesString(stateObject));
         ans.add(getTakenPillsString(stateObject));
         ans.add(getRescuedHostagesString(stateObject));
-        data=mergeArray(ans,";");
+        data = mergeArray(ans, ";");
     }
-    public StateObject getStateObject(){
-        String[]stateArray=data.split(";");
-        StateObject stateObject=new StateObject();
 
-        stateObject.setNeoPos(getNeoPos(stateArray[0]));
-        stateObject.setNeoDamage(getNeoDamage(stateArray[0]));
+    public StateObject getStateObject() {
 
-        stateObject.setIsAgentKilled(getKilledAgents(stateArray[1]));
-        stateObject.setnKills(getNumKilledAgents(stateArray[1]));
+            String[] stateArray = data.split(";", -1);
+            StateObject stateObject = new StateObject();
 
-        int[]damage=getDamageHostages(stateArray[2]);
-        stateObject.setHostageDamage(damage);
+            stateObject.setNeoPos(getNeoPos(stateArray[0]));
+            stateObject.setNeoDamage(getNeoDamage(stateArray[0]));
+        try {
+            stateObject.setIsAgentKilled(getKilledAgents(stateArray[1]));
+            stateObject.setnKills(getNumKilledAgents(stateArray[1]));
 
-        stateObject.setIsHostageCarried(getCarriedHostages(stateArray[3]));
+            int[] damage = getDamageHostages(stateArray[2]);
+            stateObject.setHostageDamage(damage);
 
-        stateObject.setIsTurnedAgent(getTurnedAgents(damage));
+            stateObject.setIsHostageCarried(getCarriedHostages(stateArray[3]));
 
-        stateObject.setIsPillTaken(getTakenPills(stateArray[4]));
+            stateObject.setIsTurnedAgent(getTurnedAgents(damage));
 
-        stateObject.setIsRescuedHostage(getRescuedHostages(stateArray[5]));
-        stateObject.setnDeaths(getNumRescuedHostages(stateArray[5]));
+            stateObject.setIsPillTaken(getTakenPills(stateArray[4]));
 
+            stateObject.setIsRescuedHostage(getRescuedHostages(stateArray[5]));
+            stateObject.setnDeaths(getNumRescuedHostages(stateArray[5]));
+        }catch (Exception e){
+            System.out.println(this);
+            for(String s:stateArray)
+                System.out.println(s);
+        }
         return stateObject;
     }
-    public String getNeoPosString(StateObject stateObject){
-        StringBuilder sb=new StringBuilder();
-        Pos neoPos= stateObject.getNeoPos();
-        int neoDamage=stateObject.getNeoDamage();
+
+    public String getNeoPosString(StateObject stateObject) {
+        StringBuilder sb = new StringBuilder();
+        Pos neoPos = stateObject.getNeoPos();
+        int neoDamage = stateObject.getNeoDamage();
         sb.append(neoPos.x);
         sb.append(',');
         sb.append(neoPos.y);
@@ -55,137 +78,167 @@ public class State {
         return sb.toString();
 
     }
-    public Pos getNeoPos(String posString){
-        String[]coordinates=posString.split(",");
-        int x=Integer.parseInt(coordinates[0]);
-        int y=Integer.parseInt(coordinates[1]);
-        return new Pos(x,y);
+
+    public Pos getNeoPos(String posString) {
+        String[] coordinates = posString.split(",", -1);
+        int x = Integer.parseInt(coordinates[0]);
+        int y = Integer.parseInt(coordinates[1]);
+        return new Pos(x, y);
     }
 
-    public int getNeoDamage(String neoString){
-        String[] neoStringArr=neoString.split(",");
+    public int getNeoDamage(String neoString) {
+        String[] neoStringArr = neoString.split(",", -1);
         int damage = Integer.parseInt(neoStringArr[2]);
 
         return damage;
     }
 
-    public static String  mergeArray(ArrayList<String> arr,String sep){
-        if(arr.size()==0)return "";
+    //    public static void main(String[] args) {
+//        ArrayList<String>arr=new ArrayList<>();
+//        arr.add("samer");
+//        arr.add("samer");
+//        arr.add("ge");
+//        arr.add("or");
+//        arr.add("geto");
+//        System.out.println(mergeArray(arr,";"));
+//
+//    }
+    public static String mergeArray(ArrayList<String> arr, String sep) {
+        if (arr.size() == 0) return "";
         StringBuilder stringBuilder = new StringBuilder(arr.get(0));
-        int n= arr.size();
+        int n = arr.size();
         for (int i = 1; i < n; i++) {
-            stringBuilder.append(arr.get(i));
             stringBuilder.append(sep);
+            stringBuilder.append(arr.get(i));
         }
         return stringBuilder.toString();
     }
-    public String getKilledAgentsString(StateObject stateObject){
-        boolean[]killedAgents=stateObject.getIsAgentKilled();
-        ArrayList<String> ans=new ArrayList<>();
-        for (int i = 0; i < killedAgents.length; i++)
-            if(killedAgents[i])
-                ans.add(i+"");
 
-        return mergeArray(ans,",");
+    public String getKilledAgentsString(StateObject stateObject) {
+        boolean[] killedAgents = stateObject.getIsAgentKilled();
+        ArrayList<String> ans = new ArrayList<>();
+        for (int i = 0; i < killedAgents.length; i++)
+            if (killedAgents[i])
+                ans.add(i + "");
+
+        return mergeArray(ans, ",");
 
     }
-    public boolean[] getKilledAgents(String killedAgentsString){
-        String[]killedAgentsArr=killedAgentsString.split(",");
-        boolean[]killedAgents=new boolean[10];
-        for(String killedAgent:killedAgentsArr){
-            int idx=Integer.parseInt(killedAgent);
-            killedAgents[idx]=true;
+
+    public boolean[] getKilledAgents(String killedAgentsString) {
+        String[] killedAgentsArr = killedAgentsString.split(",", -1);
+        boolean[] killedAgents = new boolean[nAgents];
+        if (killedAgentsString.length() > 0) {
+            for (String killedAgent : killedAgentsArr) {
+                try {
+                    int idx = Integer.parseInt(killedAgent);
+                    killedAgents[idx] = true;
+                } catch (Exception e) {
+                    System.out.println(this);
+                    throw e;
+                }
+            }
         }
         return killedAgents;
     }
 
 
     public String getDamageHostagesString(StateObject stateObject) {
-        int[]damage=stateObject.getHostageDamage();
-        ArrayList<String>ans=new ArrayList<>();
-        for(int dam:damage){
-            ans.add(dam+"");
+        int[] damage = stateObject.getHostageDamage();
+        ArrayList<String> ans = new ArrayList<>();
+        for (int dam : damage) {
+            ans.add(dam + "");
         }
-        return mergeArray(ans,",");
+        return mergeArray(ans, ",");
     }
-    public int[] getDamageHostages(String DamageString){
-        String[]damageArray=DamageString.split(",");
-        int[]damage=new int[10];
-        for (int i = 0; i < damageArray.length; i++) {
-            int healthValue=Integer.parseInt(damageArray[i]);
-            damage[i]=healthValue;
-        }
 
+    public int[] getDamageHostages(String DamageString) {
+        String[] damageArray = DamageString.split(",", -1);
+        int[] damage = new int[nHostage];
+        if (DamageString.length() > 0) {
+            for (int i = 0; i < damageArray.length; i++) {
+                int healthValue = Integer.parseInt(damageArray[i]);
+                damage[i] = healthValue;
+            }
+
+        }
         return damage;
     }
+
     public String getCarriedHostagesString(StateObject stateObject) {
-        boolean[]isCarried=stateObject.getIsHostageCarried();
-        ArrayList<String>ans=new ArrayList<>();
+        boolean[] isCarried = stateObject.getIsHostageCarried();
+        ArrayList<String> ans = new ArrayList<>();
         for (int i = 0; i < isCarried.length; i++)
-            if(isCarried[i])
-                ans.add(i+"");
-        return mergeArray(ans,"");
+            if (isCarried[i])
+                ans.add(i + "");
+        return mergeArray(ans, "");
 
     }
-        public boolean[] getCarriedHostages(String carriedHostagesString){
-        boolean[]carriedHostages=new boolean[10];
-        for(int i=0;i<carriedHostagesString.length();i++){
-            int idx=Integer.parseInt(carriedHostagesString.charAt(i)+"");
-            carriedHostages[idx]=true;
+
+    public boolean[] getCarriedHostages(String carriedHostagesString) {
+        boolean[] carriedHostages = new boolean[nHostage];
+        for (int i = 0; i < carriedHostagesString.length(); i++) {
+            int idx = Integer.parseInt(carriedHostagesString.charAt(i) + "");
+            carriedHostages[idx] = true;
         }
         return carriedHostages;
     }
 
-    public boolean[] getTurnedAgents(int[]damage){
-        boolean[] isTurnedAgent=new boolean[10];
+    public boolean[] getTurnedAgents(int[] damage) {
+        boolean[] isTurnedAgent = new boolean[nHostage];
         for (int i = 0; i < damage.length; i++) {
-            if(damage[i]>=100)
-                isTurnedAgent[i]=true;
+            if (damage[i] >= 100)
+                isTurnedAgent[i] = true;
         }
 
         return isTurnedAgent;
     }
+
     public String getTakenPillsString(StateObject stateObject) {
-        boolean[]takenPills=stateObject.getIsPillTaken();
-        ArrayList<String>ans=new ArrayList<>();
+        boolean[] takenPills = stateObject.getIsPillTaken();
+        ArrayList<String> ans = new ArrayList<>();
         for (int i = 0; i < takenPills.length; i++)
-            if(takenPills[i])
-                ans.add(i+"");
-        return mergeArray(ans,"");
+            if (takenPills[i])
+                ans.add(i + "");
+        return mergeArray(ans, "");
     }
-        public boolean[] getTakenPills(String takenPillString){
-        boolean[]takenPills=new boolean[10];
-        for(int i=0;i<takenPillString.length();i++){
-            int idx=Integer.parseInt(takenPillString.charAt(i)+"");
-            takenPills[idx]=true;
+
+    public boolean[] getTakenPills(String takenPillString) {
+        boolean[] takenPills = new boolean[nPills];
+        for (int i = 0; i < takenPillString.length(); i++) {
+            int idx = Integer.parseInt(takenPillString.charAt(i) + "");
+            takenPills[idx] = true;
         }
+
         return takenPills;
     }
+
     public String getRescuedHostagesString(StateObject stateObject) {
-        boolean[]rescuedHostages=stateObject.getIsRescuedHostage();
-        ArrayList<String>ans=new ArrayList<>();
+        boolean[] rescuedHostages = stateObject.getIsRescuedHostage();
+        ArrayList<String> ans = new ArrayList<>();
         for (int i = 0; i < rescuedHostages.length; i++)
-            if(rescuedHostages[i])
-                ans.add(i+"");
-        return mergeArray(ans,"");
+            if (rescuedHostages[i])
+                ans.add(i + "");
+        return mergeArray(ans, "");
     }
-    public boolean[] getRescuedHostages(String rescuedHostageString){
-        boolean[] rescuedHostages=new boolean[10];
-        for(int i=0;i<rescuedHostageString.length();i++){
-            int idx=Integer.parseInt(rescuedHostageString.charAt(i)+"");
-            rescuedHostages[idx]=true;
+
+    public boolean[] getRescuedHostages(String rescuedHostageString) {
+        boolean[] rescuedHostages = new boolean[nHostage];
+        for (int i = 0; i < rescuedHostageString.length(); i++) {
+            int idx = Integer.parseInt(rescuedHostageString.charAt(i) + "");
+            rescuedHostages[idx] = true;
         }
         return rescuedHostages;
     }
 
-    public int getNumKilledAgents(String killedAgentsString){
-        String[]killedAgentsArr=killedAgentsString.split(",");
+    public int getNumKilledAgents(String killedAgentsString) {
+        String[] killedAgentsArr = killedAgentsString.split(",", -1);
         return killedAgentsArr.length;
     }
 
 
-    public int getNumRescuedHostages(String rescuedHostageString){
-        String[]rescuedHostagesArr=rescuedHostageString.split(",");
+    public int getNumRescuedHostages(String rescuedHostageString) {
+        String[] rescuedHostagesArr = rescuedHostageString.split(",", -1);
         return rescuedHostagesArr.length;
     }
 

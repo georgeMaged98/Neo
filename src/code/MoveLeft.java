@@ -19,6 +19,11 @@ public class MoveLeft extends Operator{
 
         Pos neoPos = currentStateObject.getNeoPos();
 
+        // check if Neo is not facing a wall
+        if(neoPos.x - 1 == -1){
+            return false;
+        }
+
         boolean[] isAgentKilled = currentStateObject.getIsAgentKilled();
         boolean[] isTurnedAgent = currentStateObject.getIsTurnedAgent();
 
@@ -27,10 +32,6 @@ public class MoveLeft extends Operator{
         GridElement[][] grid = currentMatrixProblem.getGrid(); // change to getter
         GridElement leftCell = grid[neoPos.x - 1][neoPos.y];
 
-        // check if Neo is not facing a wall
-        if(neoPos.x - 1 == -1){
-            return false;
-        }
 
         // check if the left cell contains agent which is not killed
         if(leftCell.matrixObject == MatrixObject.AGENT && !isAgentKilled[leftCell.index]){
