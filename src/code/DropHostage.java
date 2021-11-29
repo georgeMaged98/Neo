@@ -22,7 +22,7 @@ public class DropHostage  extends Operator{
                 nRescued++;
             }
         }
-        currentStateObject.setnRescued(nRescued);
+        currentStateObject.setnDeaths(nRescued);
 
         return currentStateObject;
     }
@@ -38,9 +38,7 @@ public class DropHostage  extends Operator{
         GridElement currentCell = grid[neoPos.x][neoPos.y];
 
         // Neo must be in the same cell as TB.
-        if(currentCell.matrixObject != MatrixObject.TELEPHONE_BOOTH)
-            return  false;
 
-        return true;
+        return currentCell.matrixObject == MatrixObject.TELEPHONE_BOOTH;
     }
 }

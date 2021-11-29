@@ -31,7 +31,7 @@ public class TakePill extends Operator{
         for (int i=0;i<hostageDamage.length;i++){
             // Decrease the damage to hostages which are either in place or carried.
             // -> The hostage should not be a turned agent and its damage should be less than 100
-            if (!isTurnedAgent[i] && hostageDamage[i] < 100){
+            if (!isTurnedAgent[i]){
                 hostageDamage[i] -= 22;
                 if(hostageDamage[i] < 0)
                     hostageDamage[i] = 0;

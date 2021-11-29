@@ -39,7 +39,7 @@ public class State {
         stateObject.setIsPillTaken(getTakenPills(stateArray[4]));
 
         stateObject.setIsRescuedHostage(getRescuedHostages(stateArray[5]));
-        stateObject.setnRescued(getNumRescuedHostages(stateArray[5]));
+        stateObject.setnDeaths(getNumRescuedHostages(stateArray[5]));
 
         return stateObject;
     }
@@ -69,7 +69,7 @@ public class State {
         return damage;
     }
 
-    public String mergeArray(ArrayList<String> arr,String sep){
+    public static String  mergeArray(ArrayList<String> arr,String sep){
         if(arr.size()==0)return "";
         StringBuilder stringBuilder = new StringBuilder(arr.get(0));
         int n= arr.size();

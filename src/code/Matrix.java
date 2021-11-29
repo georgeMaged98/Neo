@@ -1,6 +1,8 @@
 package code;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Matrix extends SearchProblem {
@@ -159,20 +161,141 @@ public class Matrix extends SearchProblem {
         solve(grid,"BFS",false);
     }
 
-
+    public boolean isNeoAtTB(StateObject stateObject){
+        return stateObject.getNeoPos().equals(telephonePos);
+    }
     public boolean goalTest(State s) {
 
-        return false;
+        StateObject stateObject= getIntialState().getStateObject();
+        for (int i = 0; i < hostagePos.length; i++)
+            if(!stateObject.isHostageRescuedOrKilled(i))
+                return false;
+
+        return isNeoAtTB(stateObject);
     }
 
-    public static void genGrid() {
+    public static String genGrid() {
+        String grid="";
+        String hostages = "";
+        String pills = "";
+
+
+
+
+
+        Random rand = new Random();
+        int numberOfHostagesCarried =(int) Math.floor(Math.random() * (4 - 1 + 1) + 1);
+        int minDimension = 5;
+        int maxDimension = 15;
+       int gridXDimension = (int) Math.floor(Math.random() * (maxDimension - minDimension + 1) + minDimension);
+      int  gridYDimension = (int) Math.floor(Math.random() * (maxDimension - minDimension + 1) + minDimension);
+        List<String> indicies = new ArrayList<String>();
+        for (int i = 0; i < gridXDimension; i++) {
+
+
+            for (int j = 0; j < gridYDimension; j++) {
+                indicies.add(Integer.toString(i) + Integer.toString(j));
+
+            }
+
+        }
+
+        grid+=gridXDimension+","+gridYDimension+";";
+        grid+=Integer.toString(numberOfHostagesCarried)+";";
+        int randNeoPos = rand.nextInt(indicies.size());
+        String neoPos = indicies.get(randNeoPos);
+        indicies.remove(randNeoPos);
+        grid+= neoPos.charAt(0)+","+neoPos.charAt(1)+";";
+
+
+        int randTelephonePos = rand.nextInt(indicies.size());
+        String telePos = indicies.get(randTelephonePos);
+        indicies.remove(randTelephonePos);
+        grid+= telePos.charAt(0)+","+telePos.charAt(1)+";";
+
+
+
+
+
+
+        int numberOfHostages = (int) Math.floor(Math.random() * (10 - 3 + 1) + 3);
+        int numberOfPills = (int) Math.floor(Math.random() * (numberOfHostages - 1 + 1) + 1);
+
+        for (int i = 0;i<numberOfPills;i++){
+            int randPillPos = rand.nextInt(indicies.size());
+            String pillPos = indicies.get(randPillPos);
+            indicies.remove(randPillPos);
+            if(i!=numberOfPills-1){
+                pills+= pillPos.charAt(0)+","+pillPos.charAt(1)+",";}
+            else {
+                pills+= pillPos.charAt(0)+","+pillPos.charAt(1)+";";
+            }
+
+        }
+
+
+
+        for(int i = 0;i<numberOfHostages;i++){
+            int randHostageDamage = (int) Math.floor(Math.random() * (99 - 1 + 1) + 1);
+
+            int randHostagePos = rand.nextInt(indicies.size());
+            String hostagePos = indicies.get(randHostagePos);
+            indicies.remove(randHostagePos);
+
+            if(i!=numberOfHostages-1){
+                hostages+= hostagePos.charAt(0)+","+hostagePos.charAt(1)+","+Integer.toString(randHostageDamage)+",";}
+            else {
+                hostages+= hostagePos.charAt(0)+","+hostagePos.charAt(1)+","+Integer.toString(randHostageDamage);
+            }
+
+        }
+
+        grid+=pills;
+
+        int numberOfPads = 2+rand.nextInt((indicies.size()-2)/2) *2;
+
+
+
+
+        for(int i = 0 ;i<numberOfPads;i++){
+            int randPadPos = rand.nextInt(indicies.size());
+            String padPos = indicies.get(randPadPos);
+            indicies.remove(randPadPos);
+            if(i!=numberOfPads-1){
+                grid+= padPos.charAt(0)+","+padPos.charAt(1)+",";}
+            else {
+                grid+= padPos.charAt(0)+","+padPos.charAt(1)+";";
+            }
+
+
+        }
+        int numberOfAgents = indicies.size()/2;
+
+        for(int i = 0 ;i<numberOfAgents;i++){
+            int randAgentPos = rand.nextInt(indicies.size()/2);
+            String agentPos = indicies.get(randAgentPos);
+            indicies.remove(randAgentPos);
+            if(i!=numberOfAgents-1){
+                grid+= agentPos.charAt(0)+","+agentPos.charAt(1)+",";}
+            else {
+                grid+= agentPos.charAt(0)+","+agentPos.charAt(1)+";";
+            }
+
+
+        }
+        grid+=hostages;
+
+        return grid;
+
+
+
 
     }
 
     public static String solve(String grid, String strategy, boolean visualize) {
         Matrix matrix=new Matrix(grid);
         SearchProcedure searchProcedure=null;
-        if(strategy.equals("BFS"))
+        if(strategy.equals("BF"))
              searchProcedure=new BFS(matrix);
         // create node -initialState -
         StateObject stateObject=new StateObject();
@@ -182,12 +305,25 @@ public class Matrix extends SearchProblem {
 
         Node answer=searchProcedure.search(initialNode);
 
-
-        return prepareOutput(answer);
+        int nNodes=searchProcedure.getnExpandedNodes();
+        return prepareOutput(answer,nNodes);
     }
 
-    public  static String prepareOutput(Node goal){
-        return "";
+    public  static String prepareOutput(Node goal,int nNodes){
+        // plan --> deaths--> kills --> Nodes
+        Node node=goal;
+        ArrayList<String>ans=new ArrayList<>();
+        while (node.getParentNode()!=null){
+            ans.add(node.getOperator().getName());
+            node=node.getParentNode();
+        }
+        String plan=State.mergeArray(ans,",");
+        ans=new ArrayList<>();
+        ans.add(plan);
+        ans.add(node.getnDeathes()+"");
+        ans.add(node.getnKills()+"");
+        ans.add(nNodes+"");
+        return State.mergeArray(ans,";");
     }
 
     private static void fillStateObject(StateObject stateObject,Matrix matrix){
@@ -199,7 +335,7 @@ public class Matrix extends SearchProblem {
         stateObject.setIsRescuedHostage(new boolean[matrix.hostagePos.length]);
         stateObject.setIsPillTaken(new boolean[matrix.pillsPos.length]);
         stateObject.setnKills(0);
-        stateObject.setnRescued(0);
+        stateObject.setnDeaths(0);
         stateObject.setNeoDamage(0);
 
     }

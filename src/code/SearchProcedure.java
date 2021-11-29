@@ -4,65 +4,85 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public abstract class SearchProcedure { // To be named strategy
-	
-	protected SearchProblem problem;
-	private HashSet<String>stateSet=new HashSet<>();
 
-	public int getnExpandedNodes() {
-		return nExpandedNodes;
-	}
+    protected SearchProblem problem;
+    private HashSet<String> stateSet = new HashSet<>();
 
-	int nExpandedNodes=0;
+    public int getnExpandedNodes() {
+        return nExpandedNodes;
+    }
 
-	public abstract void enqueue(Node node);
+    private int nExpandedNodes = 0;
 
-	public abstract Node dequeue();
+    public abstract void enqueue(Node node);
 
-	public abstract boolean isEmpty();
+    public abstract Node dequeue();
 
-	public Node search(Node root) {
-		// 1. enqueue root
+    public abstract boolean isEmpty();
 
-		enqueue(root);
+    private static void updateDamage(StateObject stateObject) {
+        for (int i = 0; i < stateObject.getHostageDamage().length; i++)
+            stateObject.updateHostageDamage(i, 2);
+    }
 
-		while (!isEmpty()) {
-			// dequeue front node
-			Node node = dequeue();
+    public Node nextTimeStep(Node node, StateObject stateObject, Operator operator) {
+        updateDamage(stateObject);
+        State state = new State(stateObject);
+        Node outputNode = new Node(state, node, operator);
+        outputNode.setnDeathes(stateObject.getnDeaths());
+        outputNode.setnKills(stateObject.getnKills());
+        if (stateObject.isNeoDead())
+            return null;
+        return outputNode;
 
-			State currentState = node.getState();
-			stateSet.add(currentState.getData());
-			/*
-			todo may change the string
-			 */
-			ArrayList<Operator> operators = problem.getOperators();
-			if (problem.goalTest(currentState))
-				return node;
-			nExpandedNodes++;
-			for(Operator operator : operators) {
-			StateObject stateObject=currentState.getStateObject();
+    }
 
-				// check for valid opertaors
-				if(!operator.isActionDoable(node,stateObject))
-					continue;
+    public void incrementNodes() {
+        nExpandedNodes++;
+    }
 
-				// expand node
-				// nextTimeStep -> health(neo hostage)-- node transformation //make sure neo health
-				StateObject expandedStateObject = operator.apply(stateObject);
-				// apply next time step on expandedStateObject
+    public void addToDuplicateSet(State state) {
+        stateSet.add(state.getData());
+    }
 
-				// create newstate
-				State newState=new State(stateObject);
-				// Check for duplicate states
-				if(stateSet.contains(newState.getData()))
-					continue;
+    public Node search(Node root) {
+        // 1. enqueue root
+        nExpandedNodes = 0;
+        enqueue(root);
 
+        while (!isEmpty()) {
+            // dequeue front node
+            Node node = dequeue();
+            State currentState = node.getState();
+            addToDuplicateSet(node.getState());
+            if (problem.goalTest(currentState))
+                return node;
 
-			//	enqueue(expandedNode);
-				
-			}
-		}
+            incrementNodes();
 
-		return null;
-	}
+            ArrayList<Operator> operators = problem.getOperators();
+            for (Operator operator : operators) {
+                StateObject stateObject = currentState.getStateObject();
+
+                // check for valid operators
+                if (!operator.isActionDoable(node, stateObject))
+                    continue;
+
+                operator.apply(stateObject);
+
+                // apply next time step on expandedStateObject
+                Node outputNode = nextTimeStep(node, stateObject, operator);
+
+                // Check for duplicate states
+                if (outputNode == null || stateSet.contains(outputNode.getState().getData()))
+                    continue;
+
+                enqueue(outputNode);
+
+            }
+        }
+
+        return null;
+    }
 
 }

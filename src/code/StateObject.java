@@ -9,8 +9,30 @@ public class StateObject {
     private boolean[] isPillTaken;
     private boolean[] isRescuedHostage;
     private int nKills;
-    private int nRescued;
+    private int nDeaths;
     private int neoDamage;
+
+    public boolean isHostageKilled(int idx) {
+        return hostageDamage[idx] == -1;
+    }
+
+    public boolean isHostageDeadCarried(int idx) {
+        return !isTurnedAgent[idx] && hostageDamage[idx] == 100;
+
+    }
+    public boolean isNeoDead(){
+        return neoDamage>=100;
+    }
+    public boolean isHostageTurned(int idx) {
+        return isTurnedAgent[idx];
+    }
+    public boolean isHostageRescued(int idx){
+        return isRescuedHostage[idx];
+    }
+    public boolean isHostageRescuedOrKilled(int idx){
+        return isHostageRescued(idx)||isHostageKilled(idx);
+    }
+
 
     public Pos getNeoPos() {
         return neoPos;
@@ -18,6 +40,19 @@ public class StateObject {
 
     public boolean[] getIsAgentKilled() {
         return isAgentKilled;
+    }
+
+    public void updateHostageDamage(int idx, int addedDamage) {
+        if (!isRescuedHostage[idx] && !isTurnedAgent[idx]&&!isHostageDeadCarried(idx)) {
+            hostageDamage[idx] += addedDamage;
+            if (hostageDamage[idx] >= 100) {
+                nDeaths++;
+                hostageDamage[idx] = 100;
+                if (!isHostageCarried[idx])
+                    isTurnedAgent[idx] = true;
+            }
+        }
+
     }
 
     public int[] getHostageDamage() {
@@ -45,7 +80,9 @@ public class StateObject {
         this.neoPos = neoPos;
     }
 
-    public void setIsAgentKilled(boolean[] isAgentKilled) { this.isAgentKilled = isAgentKilled;}
+    public void setIsAgentKilled(boolean[] isAgentKilled) {
+        this.isAgentKilled = isAgentKilled;
+    }
 
     public void setHostageDamage(int[] hostageDamage) {
         this.hostageDamage = hostageDamage;
@@ -76,12 +113,12 @@ public class StateObject {
         this.nKills = nKills;
     }
 
-    public int getnRescued() {
-        return nRescued;
+    public int getnDeaths() {
+        return nDeaths;
     }
 
-    public void setnRescued(int nRescued) {
-        this.nRescued = nRescued;
+    public void setnDeaths(int nDeaths) {
+        this.nDeaths = nDeaths;
     }
 
     public int getNeoDamage() {
