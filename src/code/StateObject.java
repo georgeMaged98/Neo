@@ -225,7 +225,7 @@ public class StateObject {
         // decrease damage for alive hostages by 22 to compensate for timestep increase by 2
         for (int i = 0; i < hostageDamage.length; i++) {
             if(checkHostageAlive(i)){
-                hostageDamage[i] -= 22;
+                hostageDamage[i] -= 20;
                 if(hostageDamage[i] < 0)
                     hostageDamage[i] = 0;
             }

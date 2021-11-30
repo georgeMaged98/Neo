@@ -28,7 +28,8 @@ public abstract class SearchProcedure { // To be named strategy
     }
 
     public Node nextTimeStep(Node node, StateObject stateObject, Operator operator) {
-        updateDamage(stateObject);
+        if (!operator.getName().equals("takePill"))
+            updateDamage(stateObject);
         State state = new State(stateObject);
         Node outputNode = new Node(state, node, operator);
         outputNode.setnDeathes(stateObject.getnDeaths());
