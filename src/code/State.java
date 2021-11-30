@@ -36,7 +36,14 @@ public class State {
         ans.add(getRescuedHostagesString(stateObject));
         data = mergeArray(ans, ";");
     }
-
+    public String getPrimaryState(){
+        ArrayList<String>ans=new ArrayList<>();
+        String[] arr= data.split(";", -1);
+        for (int i = 0; i <arr.length ; i++)
+            if(i!=2)
+                ans.add(arr[i]);
+        return mergeArray(ans,";");
+    }
     public StateObject getStateObject() {
 
             String[] stateArray = data.split(";", -1);

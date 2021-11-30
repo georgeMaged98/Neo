@@ -5,10 +5,12 @@ import java.util.Stack;
 
 public class IDS extends SearchProcedure {
     int currentDepth;
-    Stack<Node> stack = new Stack<>();
+    Stack<Node> stack;
 
-    public IDS() {
+    public IDS(Matrix matrix) {
+        this.stack = new Stack<>();
         this.currentDepth = 0;
+        problem=matrix;
     }
 
     @Override
