@@ -5,8 +5,9 @@ import java.util.Stack;
 public class DFS extends SearchProcedure {
     Stack<Node>stack;
 
-    public DFS() {
+    public DFS(SearchProblem problem) {
         this.stack = new Stack<>();
+        this.problem=problem;
     }
 
     @Override

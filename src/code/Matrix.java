@@ -89,11 +89,12 @@ public class Matrix extends SearchProblem {
         operators.add(new DropHostage(0, this, "drop"));
         operators.add(new TakePill(0, this, "takePill"));
         operators.add(new KillAgent(0, this, "kill"));
+        operators.add(new MoveLeft(0, this, "up"));
+        operators.add(new MoveRight(0, this, "down"));
+        operators.add(new MoveDown(0, this, "left"));
+        operators.add(new MoveUp(0, this, "right"));
         operators.add(new Fly(0, this, "fly"));
-        operators.add(new MoveLeft(0, this, "left"));
-        operators.add(new MoveRight(0, this, "right"));
-        operators.add(new MoveDown(0, this, "down"));
-        operators.add(new MoveUp(0, this, "up"));
+
         setOperators(operators);
     }
 
@@ -158,7 +159,7 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-        String str = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
+        String str = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
         System.out.println(solve(str, "BF", false));
     }
 
@@ -181,7 +182,7 @@ public class Matrix extends SearchProblem {
         Matrix matrix = new Matrix(grid);
         SearchProcedure searchProcedure = null;
         if (strategy.equals("BF"))
-            searchProcedure = new BFS(matrix);
+            searchProcedure = new DFS(matrix);
         // create node -initialState -
         StateObject stateObject = new StateObject();
         matrix.fillStateObject(stateObject);
@@ -202,6 +203,7 @@ public class Matrix extends SearchProblem {
             ans.add(node.getOperator().getName());
             node = node.getParentNode();
         }
+        Collections.reverse(ans);
         String plan = State.mergeArray(ans, ",");
         ans = new ArrayList<>();
         ans.add(plan);

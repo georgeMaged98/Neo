@@ -1,6 +1,8 @@
 package code;
 
 public class KillAgent extends Operator {
+    int []dx=new int[]{0,0,1,-1};
+    int []dy=new int[]{1,-1,0,0};
 
     public KillAgent(long costValue, Matrix matrix, String name) {
         super(costValue, matrix, name);
@@ -17,27 +19,27 @@ public class KillAgent extends Operator {
         currentStateObject.increaseNeoDamageBy20();
 
         // turn neighboring agents or neighboring turned agents to killed
-        for (int i = -1; i < 2; i += 2) {
-            for (int j = -1; j < 2; j += 2) {
-                boolean isWrongMove = currentMatrixProblem.isPosBeyondBorders(neoPos.x + i, neoPos.y + j);
-
-                if (!isWrongMove) {
-                    GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + i, neoPos.y + j);
-                    // kill agent in cell
-                    if (currentStateObject.cellContainsAliveAgent(cell)){
-                        currentStateObject.killAgent(cell);
-
-                    }
+        for (int i = 0; i <4 ; i++) {
 
 
-                    if (currentStateObject.cellContainsTurnedAliveAgent(cell)) {
-                        // kill turned agent in cell
-                        currentStateObject.killTurnedAgent(cell);
-                    }
+            boolean isWrongMove = currentMatrixProblem.isPosBeyondBorders(neoPos.x + dx[i], neoPos.y + dy[i]);
+
+            if (!isWrongMove) {
+                GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + dx[i], neoPos.y + dy[i]);
+                // kill agent in cell
+                if (currentStateObject.cellContainsAliveAgent(cell)) {
+                    currentStateObject.killAgent(cell);
+
                 }
 
+
+                if (currentStateObject.cellContainsTurnedAliveAgent(cell)) {
+                    // kill turned agent in cell
+                    currentStateObject.killTurnedAgent(cell);
+                }
             }
         }
+
     }
 
     @Override
@@ -47,15 +49,14 @@ public class KillAgent extends Operator {
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        for (int i = -1; i < 2; i += 2) {
-            for (int j = -1; j < 2; j += 2) {
-                boolean isWrongMove = currentMatrixProblem.isPosBeyondBorders(neoPos.x + i, neoPos.y + j);
+        for (int i = 0; i <4 ; i++) {
+                boolean isWrongMove = currentMatrixProblem.isPosBeyondBorders(neoPos.x + dx[i], neoPos.y + dy[i]);
                 if (!isWrongMove) {
-                    GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + i, neoPos.y + j);
+                    GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + dx[i], neoPos.y + dy[i]);
                     if (currentStateObject.cellContainsAliveAgent(cell) || currentStateObject.cellContainsTurnedAliveAgent(cell))
                         return true;
                 }
-            }
+
         }
 
         return false;
