@@ -1,5 +1,7 @@
 package code;
+import java.io.FileWriter;   // Import the FileWriter class
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -45,7 +47,9 @@ public abstract class SearchProcedure { // To be named strategy
         stateSet.add(state.getData());
     }
 
-    public Node search(Node root) {
+    public Node search(Node root) throws IOException {
+        FileWriter myWriter = new FileWriter("trace.txt");
+
         // 1. enqueue root
         nExpandedNodes = 0;
         enqueue(root);
@@ -53,6 +57,8 @@ public abstract class SearchProcedure { // To be named strategy
         while (!isEmpty()) {
             // dequeue front node
             Node node = dequeue();
+
+
             State currentState = node.getState();
             addToDuplicateSet(node.getState());
             if (problem.goalTest(currentState))
@@ -63,6 +69,7 @@ public abstract class SearchProcedure { // To be named strategy
             ArrayList<Operator> operators = problem.getOperators();
             for (Operator operator : operators) {
                 StateObject stateObject = currentState.getStateObject();
+                myWriter.write(stateObject+ "\n\n");
 
                 // check for valid operators
                 if (!operator.isActionDoable(stateObject))
@@ -82,6 +89,7 @@ public abstract class SearchProcedure { // To be named strategy
             }
         }
 
+        myWriter.close();
         return null;
     }
 

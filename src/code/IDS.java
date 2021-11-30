@@ -1,5 +1,6 @@
 package code;
 
+import java.io.IOException;
 import java.util.Stack;
 
 public class IDS extends SearchProcedure {
@@ -18,7 +19,7 @@ public class IDS extends SearchProcedure {
     }
 
     @Override
-    public Node search(Node root) {
+    public Node search(Node root) throws IOException {
         Node goal = null;
         while (goal == null) {
             goal = super.search(root);

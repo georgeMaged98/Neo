@@ -1,5 +1,7 @@
 package code;
 
+import java.util.Arrays;
+
 public class StateObject {
 
     private Pos neoPos;
@@ -278,5 +280,21 @@ public class StateObject {
 
         MatrixObject matrixObject = cell.matrixObject;
         return matrixObject == MatrixObject.PAD;
+    }
+
+    @Override
+    public String toString() {
+        return "StateObject{" +
+                "neoPos=" + neoPos +
+                ", isAgentKilled=" + Arrays.toString(isAgentKilled) +
+                ", hostageDamage=" + Arrays.toString(hostageDamage) +
+                ", isHostageCarried=" + Arrays.toString(isHostageCarried) +
+                ", isTurnedAgent=" + Arrays.toString(isTurnedAgent) +
+                ", isPillTaken=" + Arrays.toString(isPillTaken) +
+                ", isRescuedHostage=" + Arrays.toString(isRescuedHostage) +
+                ", nKills=" + nKills +
+                ", nDeaths=" + nDeaths +
+                ", neoDamage=" + neoDamage +
+                '}';
     }
 }

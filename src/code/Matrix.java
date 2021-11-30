@@ -1,5 +1,6 @@
 package code;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Matrix extends SearchProblem {
@@ -154,7 +155,7 @@ public class Matrix extends SearchProblem {
         return new Pos(Integer.parseInt(x), Integer.parseInt(y));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
         String str = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
@@ -176,7 +177,7 @@ public class Matrix extends SearchProblem {
     }
 
 
-    public static String solve(String grid, String strategy, boolean visualize) {
+    public static String solve(String grid, String strategy, boolean visualize) throws IOException {
         Matrix matrix = new Matrix(grid);
         SearchProcedure searchProcedure = null;
         if (strategy.equals("BF"))
