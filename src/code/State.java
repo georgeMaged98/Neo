@@ -19,13 +19,14 @@ public class State {
     }
 
     private String data;
-    private int nHostage, nPills, nAgents;
+    private int nHostage, nPills, nAgents,nKills,nDeaths;
 
     public State(StateObject stateObject) {
         nHostage = stateObject.getHostagesNum();
         nAgents = stateObject.getAgentsNum();
         nPills = stateObject.getPillsNum();
-
+        nKills=stateObject.getnKills();
+        nDeaths=stateObject.getnDeaths();
         ArrayList<String> ans = new ArrayList<>();
         ans.add(getNeoPosString(stateObject));
         ans.add(getKilledAgentsString(stateObject));
@@ -35,7 +36,14 @@ public class State {
         ans.add(getRescuedHostagesString(stateObject));
         data = mergeArray(ans, ";");
     }
-
+    public String getPrimaryState(){
+        ArrayList<String>ans=new ArrayList<>();
+        String[] arr= data.split(";", -1);
+        for (int i = 0; i <arr.length ; i++)
+            if(i!=2)
+                ans.add(arr[i]);
+        return mergeArray(ans,";");
+    }
     public StateObject getStateObject() {
 
             String[] stateArray = data.split(";", -1);
@@ -43,9 +51,8 @@ public class State {
 
             stateObject.setNeoPos(getNeoPos(stateArray[0]));
             stateObject.setNeoDamage(getNeoDamage(stateArray[0]));
-        try {
             stateObject.setIsAgentKilled(getKilledAgents(stateArray[1]));
-            stateObject.setnKills(getNumKilledAgents(stateArray[1]));
+            stateObject.setnKills(nKills);
 
             int[] damage = getDamageHostages(stateArray[2]);
             stateObject.setHostageDamage(damage);
@@ -57,12 +64,8 @@ public class State {
             stateObject.setIsPillTaken(getTakenPills(stateArray[4]));
 
             stateObject.setIsRescuedHostage(getRescuedHostages(stateArray[5]));
-            stateObject.setnDeaths(getNumRescuedHostages(stateArray[5]));
-        }catch (Exception e){
-            System.out.println(this);
-            for(String s:stateArray)
-                System.out.println(s);
-        }
+            stateObject.setnDeaths(nDeaths);
+
         return stateObject;
     }
 
@@ -231,13 +234,19 @@ public class State {
         return rescuedHostages;
     }
 
+    public static void main(String[] args) {
+        String s="";
+        System.out.println(s.split(",").length);
+    }
     public int getNumKilledAgents(String killedAgentsString) {
+        if(killedAgentsString.length()==0)return 0;
         String[] killedAgentsArr = killedAgentsString.split(",", -1);
         return killedAgentsArr.length;
     }
 
 
     public int getNumRescuedHostages(String rescuedHostageString) {
+        if(rescuedHostageString.length()==0)return 0;
         String[] rescuedHostagesArr = rescuedHostageString.split(",", -1);
         return rescuedHostagesArr.length;
     }

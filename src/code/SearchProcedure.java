@@ -45,11 +45,11 @@ public abstract class SearchProcedure { // To be named strategy
     }
 
     public void addToDuplicateSet(State state) {
-        stateSet.add(state.getData());
+        stateSet.add(state.getPrimaryState());
     }
-
     public Node search(Node root) throws IOException {
         FileWriter myWriter = new FileWriter("trace.txt");
+       long cnt=0;
 
         // 1. enqueue root
         nExpandedNodes = 0;
@@ -70,7 +70,7 @@ public abstract class SearchProcedure { // To be named strategy
             ArrayList<Operator> operators = problem.getOperators();
             for (Operator operator : operators) {
                 StateObject stateObject = currentState.getStateObject();
-                myWriter.write(stateObject+ "\n\n");
+
 
                 // check for valid operators
                 if (!operator.isActionDoable(stateObject))
@@ -82,9 +82,15 @@ public abstract class SearchProcedure { // To be named strategy
                 Node outputNode = nextTimeStep(node, stateObject, operator);
 
                 // Check for duplicate states
-                if (outputNode == null || stateSet.contains(outputNode.getState().getData()))
+                if (outputNode == null || stateSet.contains(outputNode.getState().getPrimaryState()))
                     continue;
+                if(cnt++%1==0) {
+                    myWriter.write("------------new State -----------------------\n\n\n");
+                    myWriter.write(stateObject + "\n\n");
+                    myWriter.write(Matrix.prepareOutput(outputNode, nExpandedNodes) + "\n\n");
 
+                    myWriter.write("------------end State -----------------------\n\n\n");
+                }
                 enqueue(outputNode);
 
             }

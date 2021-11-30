@@ -14,6 +14,11 @@ public class UCS extends SearchProcedure {
         return x.getnDeathes() - y.getnDeathes();
     }
 
+    public UCS(Matrix matrix) {
+        this.queue = new PriorityQueue<>(this::compare);
+        problem=matrix;
+    }
+
     @Override
     public void enqueue(Node node) {
         queue.add(node);
