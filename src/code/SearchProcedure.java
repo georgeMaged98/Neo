@@ -95,7 +95,7 @@ public abstract class SearchProcedure { // To be named strategy
 
             }
         }
-
+        stateSet.clear();
         myWriter.close();
         return null;
     }
