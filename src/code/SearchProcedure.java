@@ -84,13 +84,13 @@ public abstract class SearchProcedure { // To be named strategy
                 // Check for duplicate states
                 if (outputNode == null || stateSet.contains(outputNode.getState().getPrimaryState()))
                     continue;
-                if(cnt++%1==0) {
+//                if(cnt++%1==0) {
                     myWriter.write("------------new State -----------------------\n\n\n");
                     myWriter.write(stateObject + "\n\n");
-                    myWriter.write(Matrix.prepareOutput(outputNode, nExpandedNodes) + "\n\n");
+                //    myWriter.write(Matrix.prepareOutput(outputNode, nExpandedNodes,false) + "\n\n");
 
                     myWriter.write("------------end State -----------------------\n\n\n");
-                }
+       //         }
                 enqueue(outputNode);
 
             }

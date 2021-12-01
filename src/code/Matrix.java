@@ -1,7 +1,10 @@
 package code;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
 
 public class Matrix extends SearchProblem {
     private GridElement[][] grid;
@@ -9,6 +12,46 @@ public class Matrix extends SearchProblem {
     private int width, height;
     private Pos neoPos, telephonePos;
     private Pos[] agentsPos, pillsPos, startPadPos, finishPadPos, hostagePos;
+
+    static FileWriter myWriter;
+
+    public static String fill(String s, int len) {
+        StringBuilder sb = new StringBuilder(s);
+        for (int i = 0; i < len - s.length(); i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+
+    public String visualizeGridElement(GridElement gridElement, StateObject stateObject, boolean neoIsHere) {
+        String ans = gridElement.toString();
+
+        if (gridElement.matrixObject == MatrixObject.HOSTAGE) {
+            int idx = gridElement.index;
+            ans += " / " + stateObject.getDamage(idx) +" "+ (stateObject.checkHostageKilled(idx) ? "(killed)" : ((stateObject.checkAgentTurned(idx) ? "(turned)" : stateObject.checkHostageCarried(idx) ? "(carried)" : (stateObject.checkHostageRescued(idx)?"(rescued)":""))));
+        }
+        if (gridElement.matrixObject == MatrixObject.AGENT)
+            ans += " / " + (stateObject.checkAgentKilled(gridElement.index) ? "(killed)" : "");
+        if (gridElement.matrixObject == MatrixObject.PILL)
+            ans += " / " + (stateObject.checkPillTaken(gridElement.index) ? "(taken)" : "");
+
+        if (neoIsHere)
+            ans += "--NEO";
+        return fill(ans, 20) + "  |  ";
+    }
+
+    public void visualize(StateObject stateObject) throws IOException {
+        for (int i = 0; i < width; i++) {
+            myWriter.write("---------------------------------------------------------------------------------------------------------------------------\n");
+            for (int j = 0; j < height; j++)
+                myWriter.write(visualizeGridElement(grid[i][j], stateObject, stateObject.getNeoPos().equals(new Pos(i, j))));
+            myWriter.write("\n");
+        }
+        myWriter.write("---------------------------------------------------------------------------------------------------------------------------------\n\n\n");
+        myWriter.write("-----------------------------------------Neo Damage: "+stateObject.getNeoDamage() +"----------------------------------------------------------------------------------------\n\n\n");
+
+
+    }
 
     public GridElement[][] getGrid() {
         return grid;
@@ -30,33 +73,11 @@ public class Matrix extends SearchProblem {
         return neoPos;
     }
 
-    public Pos getTelephonePos() {
-        return telephonePos;
-    }
-
-    public Pos[] getAgentsPos() {
-        return agentsPos;
-    }
-
-    public Pos[] getPillsPos() {
-        return pillsPos;
-    }
-
-    public Pos[] getStartPadPos() {
-        return startPadPos;
-    }
 
     public Pos[] getFinishPadPos() {
         return finishPadPos;
     }
 
-    public Pos[] getHostagePos() {
-        return hostagePos;
-    }
-
-    public int[] getHostageDamage() {
-        return hostageDamage;
-    }
 
     private int[] hostageDamage;
 
@@ -94,7 +115,7 @@ public class Matrix extends SearchProblem {
         operators.add(new MoveDown(0, this, "left"));
         operators.add(new MoveUp(0, this, "right"));
         operators.add(new Fly(0, this, "fly"));
-
+        Collections.reverse(operators);
         setOperators(operators);
     }
 
@@ -159,8 +180,10 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-        String str = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
-        System.out.println(solve(str, "BF", false));
+        myWriter = new FileWriter("traceVisualize.txt");
+        String str = "5,5;2;0,4;3,4;3,1,1,1;2,3;3,0,0,1,0,1,3,0;4,2,54,4,0,85,1,0,43";
+        System.out.println(solve(str, "DF", false));
+        myWriter.close();
     }
 
     public boolean isNeoAtTB(StateObject stateObject) {
@@ -177,12 +200,21 @@ public class Matrix extends SearchProblem {
         return isNeoAtTB(stateObject);
     }
 
+    public static SearchProcedure getSearchProc(String strategy, Matrix matrix) {
+        if (strategy.equals("BF"))
+            return new BFS(matrix);
+        if (strategy.equals("DF"))
+            return new DFS(matrix);
+        if (strategy.equals("UC"))
+            return new UCS(matrix);
+        if (strategy.equals("ID"))
+            return new IDS(matrix);
+        return null;
+    }
 
     public static String solve(String grid, String strategy, boolean visualize) throws IOException {
         Matrix matrix = new Matrix(grid);
-        SearchProcedure searchProcedure = null;
-        if (strategy.equals("BF"))
-            searchProcedure = new UCS(matrix);
+        SearchProcedure searchProcedure = getSearchProc(strategy, matrix);
         // create node -initialState -
         StateObject stateObject = new StateObject();
         matrix.fillStateObject(stateObject);
@@ -190,20 +222,29 @@ public class Matrix extends SearchProblem {
         Node initialNode = new Node(initialState, null, null);
 
         Node answer = searchProcedure.search(initialNode);
-
+        if(answer==null)
+            return "No Solution";
         int nNodes = searchProcedure.getnExpandedNodes();
-        return prepareOutput(answer, nNodes);
+        return prepareOutput(answer, nNodes, visualize);
     }
 
-    public static String prepareOutput(Node goal, int nNodes) {
+    public static String prepareOutput(Node goal, int nNodes, boolean visualize) throws IOException {
         // plan --> deaths--> kills --> Nodes
+        Matrix matrix = goal.getOperator().getMatrix();
         Node node = goal;
         ArrayList<String> ans = new ArrayList<>();
+        matrix.visualize(node.getState().getStateObject());
+
         while (node.getParentNode() != null) {
             ans.add(node.getOperator().getName());
+            String s=node.getOperator().getName();
+            myWriter.write("--------------------------"+s+"---------------------------------------------"+s+"--------\n\n\n");
+
             node = node.getParentNode();
+            matrix.visualize(node.getState().getStateObject());
         }
         Collections.reverse(ans);
+
         String plan = State.mergeArray(ans, ",");
         ans = new ArrayList<>();
         ans.add(plan);
