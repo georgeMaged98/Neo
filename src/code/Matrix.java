@@ -182,7 +182,7 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-        String str = "5,5;2;3,4;1,2;0,3,1,4;2,3;4,4,0,2,0,2,4,4;2,2,91,2,4,62";
+        String str = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
         System.out.println(solve(str, "BF", true));
     }
 
@@ -261,8 +261,8 @@ public class Matrix extends SearchProblem {
         String plan = State.mergeArray(ans, ",");
         ans = new ArrayList<>();
         ans.add(plan);
-        ans.add(outKills + "");
         ans.add(outDeaths + "");
+        ans.add(outKills + "");
         ans.add(nNodes + "");
         return State.mergeArray(ans, ";");
     }

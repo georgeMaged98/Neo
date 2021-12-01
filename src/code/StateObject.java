@@ -228,7 +228,6 @@ public class StateObject {
         if (neoDamage < 0)
             neoDamage = 0;
 
-        // decrease damage for alive hostages by 22 to compensate for timestep increase by 2
         for (int i = 0; i < hostageDamage.length; i++) {
             if (checkHostageAlive(i)) {
                 hostageDamage[i] -= 20;

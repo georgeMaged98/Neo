@@ -9,7 +9,6 @@ public class MoveLeft extends Operator{
     @Override
     public void apply(StateObject currentStateObject) {
 
-        // x -> x - 1
         currentStateObject.moveNeoLeft();
     }
 
