@@ -47,8 +47,10 @@ public class Matrix extends SearchProblem {
                 myWriter.write(visualizeGridElement(grid[i][j], stateObject, stateObject.getNeoPos().equals(new Pos(i, j))));
             myWriter.write("\n");
         }
-        myWriter.write("---------------------------------------------------------------------------------------------------------------------------------\n\n\n");
-        myWriter.write("-----------------------------------------Neo Damage: "+stateObject.getNeoDamage() +"----------------------------------------------------------------------------------------\n\n\n");
+        myWriter.write("---------------------------------------------------------------------------------------------------------------------------------\n\n\n\n\n");
+        myWriter.write(stateObject.toString()+"\n");
+
+        myWriter.write("-----------------------------------------Neo Damage: "+stateObject.getNeoDamage() +"----------------------------------------------------------------------------------------\n\n\n\n\n\n");
 
 
     }

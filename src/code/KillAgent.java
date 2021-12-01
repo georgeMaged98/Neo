@@ -51,11 +51,11 @@ public class KillAgent extends Operator {
 
         for (int i = 0; i < 4; i++) {
             boolean isWrongMove = currentMatrixProblem.isPosBeyondBorders(neoPos.x + dx[i], neoPos.y + dy[i]);
-            if (!isWrongMove) {
+            if (isWrongMove) continue;
                 GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + dx[i], neoPos.y + dy[i]);
                 if (currentStateObject.cellContainsAliveAgent(cell) || currentStateObject.cellContainsTurnedAliveAgent(cell))
                     return true;
-            }
+
 
         }
 

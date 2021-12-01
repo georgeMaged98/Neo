@@ -87,10 +87,12 @@ public class StateObject {
         if (!isRescuedHostage[idx] && !isTurnedAgent[idx] && !checkHostageDeadCarried(idx)) {
             hostageDamage[idx] += addedDamage;
             if (hostageDamage[idx] >= 100) {
-                nDeaths++;
                 hostageDamage[idx] = 100;
                 if (!isHostageCarried[idx])
                     isTurnedAgent[idx] = true;
+                else
+                    nDeaths++;
+
             }
         }
 
@@ -268,6 +270,8 @@ public class StateObject {
         int idx = cell.index;
         hostageDamage[idx] = -1;
         nKills++;
+        nDeaths++;
+
     }
 
     public void increaseNeoDamageBy20() {
