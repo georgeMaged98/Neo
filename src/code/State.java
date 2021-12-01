@@ -56,15 +56,16 @@ public class State {
 
             int[] damage = getDamageHostages(stateArray[2]);
             stateObject.setHostageDamage(damage);
+            boolean []isCarried=getCarriedHostages(stateArray[3]);
+            stateObject.setIsHostageCarried(isCarried);
 
-            stateObject.setIsHostageCarried(getCarriedHostages(stateArray[3]));
-
-            stateObject.setIsTurnedAgent(getTurnedAgents(damage));
 
             stateObject.setIsPillTaken(getTakenPills(stateArray[4]));
+            boolean[]isRescued=getRescuedHostages(stateArray[5]);
+            stateObject.setIsRescuedHostage(isRescued);
+             stateObject.setIsTurnedAgent(getTurnedAgents(damage,isCarried,isRescued));
 
-            stateObject.setIsRescuedHostage(getRescuedHostages(stateArray[5]));
-            stateObject.setnDeaths(nDeaths);
+        stateObject.setnDeaths(nDeaths);
 
         return stateObject;
     }
@@ -187,10 +188,10 @@ public class State {
         return carriedHostages;
     }
 
-    public boolean[] getTurnedAgents(int[] damage) {
+    public boolean[] getTurnedAgents(int[] damage,boolean[]isCarried,boolean[]isRescued) {
         boolean[] isTurnedAgent = new boolean[nHostage];
         for (int i = 0; i < damage.length; i++) {
-            if (damage[i] >= 100)
+            if ((damage[i] >= 100&&!isCarried[i]&&!isRescued[i])||damage[i]==-1)
                 isTurnedAgent[i] = true;
         }
 

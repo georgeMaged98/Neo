@@ -12,6 +12,13 @@ public class Pos {
         return x == pos.x && y == pos.y;
     }
 
+    @Override
+    public String toString() {
+        return "Pos{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 
     public Pos(int x, int y) {
         this.x = x;

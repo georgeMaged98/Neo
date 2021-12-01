@@ -28,7 +28,7 @@ public class Matrix extends SearchProblem {
 
         if (gridElement.matrixObject == MatrixObject.HOSTAGE) {
             int idx = gridElement.index;
-            ans += " / " + stateObject.getDamage(idx) +" "+ (stateObject.checkHostageKilled(idx) ? "(killed)" : ((stateObject.checkAgentTurned(idx) ? "(turned)" : stateObject.checkHostageCarried(idx) ? "(carried)" : (stateObject.checkHostageRescued(idx)?"(rescued)":""))));
+            ans += " / " + stateObject.getDamage(idx) + " " + (stateObject.checkHostageKilled(idx) ? "(killed)" : ((stateObject.checkAgentTurned(idx) ? "(turned)" : stateObject.checkHostageCarried(idx) ? "(carried)" : (stateObject.checkHostageRescued(idx) ? "(rescued)" : ""))));
         }
         if (gridElement.matrixObject == MatrixObject.AGENT)
             ans += " / " + (stateObject.checkAgentKilled(gridElement.index) ? "(killed)" : "");
@@ -48,9 +48,9 @@ public class Matrix extends SearchProblem {
             myWriter.write("\n");
         }
         myWriter.write("---------------------------------------------------------------------------------------------------------------------------------\n\n\n\n\n");
-        myWriter.write(stateObject.toString()+"\n");
+        myWriter.write(stateObject.toString() + "\n");
 
-        myWriter.write("-----------------------------------------Neo Damage: "+stateObject.getNeoDamage() +"----------------------------------------------------------------------------------------\n\n\n\n\n\n");
+        myWriter.write("-----------------------------------------Neo Damage: " + stateObject.getNeoDamage() + "----------------------------------------------------------------------------------------\n\n\n\n\n\n");
 
 
     }
@@ -182,10 +182,8 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-        myWriter = new FileWriter("traceVisualize.txt");
-        String str = "5,5;2;0,4;3,4;3,1,1,1;2,3;3,0,0,1,0,1,3,0;4,2,54,4,0,85,1,0,43";
-        System.out.println(solve(str, "DF", false));
-        myWriter.close();
+        String str = "5,5;2;3,4;1,2;0,3,1,4;2,3;4,4,0,2,0,2,4,4;2,2,91,2,4,62";
+        System.out.println(solve(str, "BF", true));
     }
 
     public boolean isNeoAtTB(StateObject stateObject) {
@@ -224,34 +222,47 @@ public class Matrix extends SearchProblem {
         Node initialNode = new Node(initialState, null, null);
 
         Node answer = searchProcedure.search(initialNode);
-        if(answer==null)
+        if (answer == null)
             return "No Solution";
         int nNodes = searchProcedure.getnExpandedNodes();
-        return prepareOutput(answer, nNodes, visualize);
+        String out=prepareOutput(answer, nNodes, visualize);
+        if(visualize)
+            myWriter.close();
+
+        return out;
     }
 
     public static String prepareOutput(Node goal, int nNodes, boolean visualize) throws IOException {
         // plan --> deaths--> kills --> Nodes
         Matrix matrix = goal.getOperator().getMatrix();
         Node node = goal;
+        int outKills=node.getnKills();
+        int outDeaths=node.getnDeathes();
         ArrayList<String> ans = new ArrayList<>();
-        matrix.visualize(node.getState().getStateObject());
-
+        if (visualize) {
+            myWriter = new FileWriter("traceVisualize.txt");
+       //     myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
+            matrix.visualize(node.getState().getStateObject());
+        }
         while (node.getParentNode() != null) {
             ans.add(node.getOperator().getName());
-            String s=node.getOperator().getName();
-            myWriter.write("--------------------------"+s+"---------------------------------------------"+s+"--------\n\n\n");
+            String s = node.getOperator().getName();
+            if (visualize) {
+                myWriter.write("--------------------------" + s + "---------------------------------------------" + s + "--------\n\n\n");
+      //          myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
 
+            }
             node = node.getParentNode();
-            matrix.visualize(node.getState().getStateObject());
+            if (visualize)
+                matrix.visualize(node.getState().getStateObject());
         }
         Collections.reverse(ans);
 
         String plan = State.mergeArray(ans, ",");
         ans = new ArrayList<>();
         ans.add(plan);
-        ans.add(node.getnDeathes() + "");
-        ans.add(node.getnKills() + "");
+        ans.add(outKills + "");
+        ans.add(outDeaths + "");
         ans.add(nNodes + "");
         return State.mergeArray(ans, ";");
     }
