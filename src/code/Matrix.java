@@ -83,6 +83,7 @@ public class Matrix extends SearchProblem {
         initializeOperator();
     }
 
+
     public void initializeOperator() {
         ArrayList<Operator> operators = new ArrayList<>();
         operators.add(new CarryHostage(0, this, "carry"));
@@ -160,7 +161,7 @@ public class Matrix extends SearchProblem {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
         String str = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
-        System.out.println(solve(str, "BF", false));
+        System.out.println(solve(str, "DF", false));
     }
 
     public boolean isNeoAtTB(StateObject stateObject) {
@@ -182,7 +183,9 @@ public class Matrix extends SearchProblem {
         Matrix matrix = new Matrix(grid);
         SearchProcedure searchProcedure = null;
         if (strategy.equals("BF"))
-            searchProcedure = new UCS(matrix);
+            searchProcedure = new BFS(matrix);
+        else if (strategy.equals("DF"))
+            searchProcedure = new DFS(matrix);
         // create node -initialState -
         StateObject stateObject = new StateObject();
         matrix.fillStateObject(stateObject);
