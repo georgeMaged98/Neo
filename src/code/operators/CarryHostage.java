@@ -1,4 +1,9 @@
-package code;
+package code.operators;
+
+import code.*;
+import code.structures.GridElement;
+import code.structures.Pos;
+import code.structures.StateObject;
 
 public class CarryHostage extends Operator {
 
@@ -13,9 +18,9 @@ public class CarryHostage extends Operator {
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y);
+        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY());
 
-        currentStateObject.carryHostage(currentCell.index);
+        currentStateObject.carryHostage(currentCell.getIndex());
     }
 
     @Override
@@ -25,7 +30,7 @@ public class CarryHostage extends Operator {
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y);
+        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY());
 
         // check if there is an alive and not rescued hostage in the current cell
         if (!currentStateObject.cellContainsAliveHostage(currentCell))  return false;

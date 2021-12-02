@@ -1,4 +1,7 @@
-package code;
+package code.generics;
+
+import code.structures.StateObject;
+import code.operators.Operator;
 
 import java.util.ArrayList;
 

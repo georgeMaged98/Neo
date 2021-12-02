@@ -1,8 +1,11 @@
-package code;
+package code.operators;
 
-public class DropHostage  extends Operator{
+import code.Matrix;
+import code.structures.StateObject;
 
-    public DropHostage(long costValue, Matrix matrix,String name) {
+public class DropHostage extends Operator {
+
+    public DropHostage(long costValue, Matrix matrix, String name) {
         super(costValue, matrix, name);
     }
 

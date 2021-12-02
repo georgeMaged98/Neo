@@ -1,8 +1,13 @@
-package code;
+package code.operators;
 
-public class Fly  extends Operator{
+import code.*;
+import code.structures.GridElement;
+import code.structures.Pos;
+import code.structures.StateObject;
 
-    public Fly(long costValue, Matrix matrix,String name) {
+public class Fly  extends Operator {
+
+    public Fly(long costValue, Matrix matrix, String name) {
         super(costValue, matrix, name);
     }
 
@@ -12,7 +17,7 @@ public class Fly  extends Operator{
         Pos neoPos = currentStateObject.getNeoPos();
 
         Matrix currentMatrixProblem = this.getMatrix();
-        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y);
+        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY());
 
         currentStateObject.flyNeo(currentCell, currentMatrixProblem);
     }
@@ -23,7 +28,7 @@ public class Fly  extends Operator{
         Pos neoPos = currentStateObject.getNeoPos();
 
         Matrix currentMatrixProblem = this.getMatrix();
-        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y);
+        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY());
 
         return currentStateObject.cellContainsPad(currentCell);
     }

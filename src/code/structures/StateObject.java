@@ -1,4 +1,6 @@
-package code;
+package code.structures;
+
+import code.Matrix;
 
 import java.util.Arrays;
 
@@ -29,13 +31,15 @@ public class StateObject {
     }
 
     private int nCarried;
+
     public int getHostagesNum() {
         return hostageDamage.length;
     }
 
-    public int getDamage(int idx){
+    public int getDamage(int idx) {
         return hostageDamage[idx];
     }
+
     public int getAgentsNum() {
         return isAgentKilled.length;
     }
@@ -56,9 +60,10 @@ public class StateObject {
         return nCarried;
     }
 
-    public boolean checkPillTaken(int idx){
+    public boolean checkPillTaken(int idx) {
         return isPillTaken[idx];
     }
+
     public boolean checkHostageDeadCarried(int idx) {
         return !isTurnedAgent[idx] && hostageDamage[idx] == 100;
     }
@@ -182,32 +187,36 @@ public class StateObject {
     }
 
     public void moveNeoRight() {
-        neoPos.x++;
+        neoPos.setX(neoPos.getX() + 1);
     }
 
     public void moveNeoLeft() {
-        neoPos.x--;
+        neoPos.setX(neoPos.getX() - 1);
+        ;
     }
 
     public void moveNeoUp() {
-        neoPos.y++;
+        neoPos.setY(neoPos.getY() + 1);
+        ;
     }
 
     public void moveNeoDown() {
-        neoPos.y--;
+        neoPos.setY(neoPos.getY() - 1);
+        ;
+        ;
     }
 
 
     public boolean cellContainsAliveAgent(GridElement cell) {
-        MatrixObject matrixObject = cell.matrixObject;
-        int idx = cell.index;
+        MatrixObject matrixObject = cell.getMatrixObject();
+        int idx = cell.getIndex();
 
         return matrixObject == MatrixObject.AGENT && !checkAgentKilled(idx);
     }
 
     public boolean cellContainsTurnedAliveAgent(GridElement cell) {
-        MatrixObject matrixObject = cell.matrixObject;
-        int idx = cell.index;
+        MatrixObject matrixObject = cell.getMatrixObject();
+        int idx = cell.getIndex();
 
         if (matrixObject == MatrixObject.HOSTAGE && checkAgentTurned(idx) && !checkHostageKilled(idx)) {
             return true;
@@ -217,15 +226,15 @@ public class StateObject {
 
     // hostage should be NOT turned and NOT dead carried and NOT currently carried.
     public boolean cellContainsAliveHostage(GridElement cell) {
-        MatrixObject matrixObject = cell.matrixObject;
-        int idx = cell.index;
+        MatrixObject matrixObject = cell.getMatrixObject();
+        int idx = cell.getIndex();
 
         return matrixObject == MatrixObject.HOSTAGE && !checkAgentTurned(idx) && !checkHostageCarried(idx) && !checkHostageRescued(idx);
     }
 
     public boolean cellContainsPill(GridElement cell) {
-        MatrixObject matrixObject = cell.matrixObject;
-        int idx = cell.index;
+        MatrixObject matrixObject = cell.getMatrixObject();
+        int idx = cell.getIndex();
 
         return matrixObject == MatrixObject.PILL && !isPillTaken[idx];
     }
@@ -269,14 +278,14 @@ public class StateObject {
     }
 
     public void killAgent(GridElement cell) {
-        int idx = cell.index;
+        int idx = cell.getIndex();
         isAgentKilled[idx] = true;
         nKills++;
     }
 
 
     public void killTurnedAgent(GridElement cell) {
-        int idx = cell.index;
+        int idx = cell.getIndex();
         hostageDamage[idx] = -1;
         nKills++;
         nDeaths++;
@@ -290,13 +299,13 @@ public class StateObject {
 
     public void flyNeo(GridElement cell, Matrix matrix) {
 
-        int idx = cell.index;
+        int idx = cell.getIndex();
         neoPos = matrix.getFinishPadPos()[idx];
     }
 
     public boolean cellContainsPad(GridElement cell) {
 
-        MatrixObject matrixObject = cell.matrixObject;
+        MatrixObject matrixObject = cell.getMatrixObject();
         return matrixObject == MatrixObject.PAD;
     }
 

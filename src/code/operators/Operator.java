@@ -1,4 +1,7 @@
-package code;
+package code.operators;
+
+import code.Matrix;
+import code.structures.StateObject;
 
 public abstract class Operator {
     private long costValue;

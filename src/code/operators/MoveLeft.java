@@ -1,8 +1,13 @@
-package code;
+package code.operators;
 
-public class MoveLeft extends Operator{
+import code.*;
+import code.structures.GridElement;
+import code.structures.Pos;
+import code.structures.StateObject;
 
-    public MoveLeft(long costValue, Matrix matrix,String name) {
+public class MoveLeft extends Operator {
+
+    public MoveLeft(long costValue, Matrix matrix, String name) {
         super(costValue, matrix, name);
     }
 
@@ -20,9 +25,9 @@ public class MoveLeft extends Operator{
         Matrix currentMatrixProblem = getMatrix();
 
         // check if Neo is not facing a wall
-        if (currentMatrixProblem.isPosBeyondBorders(neoPos.x - 1, neoPos.y)) return false;
+        if (currentMatrixProblem.isPosBeyondBorders(neoPos.getX() - 1, neoPos.getY())) return false;
 
-        GridElement leftCell = currentMatrixProblem.getGridElement(neoPos.x - 1, neoPos.y);
+        GridElement leftCell = currentMatrixProblem.getGridElement(neoPos.getX() - 1, neoPos.getY());
         // check if the left cell contains agent which is not killed
         if (currentStateObject.cellContainsAliveAgent(leftCell))  return false;
 

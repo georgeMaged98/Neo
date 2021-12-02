@@ -1,4 +1,9 @@
-package code;
+package code.operators;
+
+import code.*;
+import code.structures.GridElement;
+import code.structures.Pos;
+import code.structures.StateObject;
 
 public class MoveRight extends Operator {
 
@@ -19,14 +24,14 @@ public class MoveRight extends Operator {
         Matrix currentMatrixProblem = this.getMatrix();
 
         // check if Neo is not facing a wall
-        if (currentMatrixProblem.isPosBeyondBorders(neoPos.x + 1, neoPos.y)) return false;
+        if (currentMatrixProblem.isPosBeyondBorders(neoPos.getX() + 1, neoPos.getY())) return false;
 
-        GridElement rightCell = currentMatrixProblem.getGridElement(neoPos.x + 1, neoPos.y);
+        GridElement rightCell = currentMatrixProblem.getGridElement(neoPos.getX() + 1, neoPos.getY());
         // check if the right cell contains agent which is not killed
-        if (currentStateObject.cellContainsAliveAgent(rightCell))  return false;
+        if (currentStateObject.cellContainsAliveAgent(rightCell)) return false;
 
         // check if the right cell contains hostage which is turned to agent and not yet killed
-        if(currentStateObject.cellContainsTurnedAliveAgent(rightCell)) return false;
+        if (currentStateObject.cellContainsTurnedAliveAgent(rightCell)) return false;
 
         return true;
     }

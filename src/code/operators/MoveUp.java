@@ -1,4 +1,9 @@
-package code;
+package code.operators;
+
+import code.*;
+import code.structures.GridElement;
+import code.structures.Pos;
+import code.structures.StateObject;
 
 public class MoveUp extends Operator {
 
@@ -21,14 +26,14 @@ public class MoveUp extends Operator {
         Matrix currentMatrixProblem = this.getMatrix();
 
         // check if Neo is not facing a wall
-        if (currentMatrixProblem.isPosBeyondBorders(neoPos.x, neoPos.y + 1)) return false;
+        if (currentMatrixProblem.isPosBeyondBorders(neoPos.getX(), neoPos.getY() + 1)) return false;
 
-        GridElement upCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y + 1);
+        GridElement upCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY() + 1);
         // check if the up cell contains agent which is not killed
-        if (currentStateObject.cellContainsAliveAgent(upCell))  return false;
+        if (currentStateObject.cellContainsAliveAgent(upCell)) return false;
 
         // check if the up cell contains hostage which is turned to agent and not yet killed
-        if(currentStateObject.cellContainsTurnedAliveAgent(upCell)) return false;
+        if (currentStateObject.cellContainsTurnedAliveAgent(upCell)) return false;
 
         return true;
     }
