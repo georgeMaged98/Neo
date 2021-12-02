@@ -1,4 +1,10 @@
-package code;
+package code.SearchProcedures;
+
+import code.generics.Node;
+import code.generics.SearchProblem;
+import code.generics.State;
+import code.structures.StateObject;
+import code.operators.Operator;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -56,6 +62,7 @@ public abstract class SearchProcedure { // To be named strategy
         nExpandedNodes = 0;
         enqueue(root);
         boolean firstTime = true;
+
         while (!isEmpty()) {
             // dequeue front node
             Node node = dequeue();
@@ -69,17 +76,11 @@ public abstract class SearchProcedure { // To be named strategy
 
             incrementNodes();
 
-            ArrayList<Operator> operators = problem.getOperators();
-            for (Operator operator : operators) {
-                if (!firstTime)
-                    stateObject = currentState.getStateObject();
-                else
-                    firstTime = false;
+            // check for valid operators
+            ArrayList<Operator> filteredOperators = filterOperators(problem.getOperators(), stateObject);
 
-
-                // check for valid operators
-                if (!operator.isActionDoable(stateObject))
-                    continue;
+            for (Operator operator : filteredOperators) {
+                stateObject = currentState.getStateObject();
 
                 operator.apply(stateObject);
 
@@ -87,11 +88,10 @@ public abstract class SearchProcedure { // To be named strategy
                 Node outputNode = nextTimeStep(node, stateObject, operator);
 
                 // Check for duplicate states
-                if (outputNode == null || stateSet.contains(outputNode.getState().getPrimaryState()))
+                if (outputNode == null || stateSet.contains(outputNode.getState().getPrimaryState())) {
                     continue;
-
+                }
                 enqueue(outputNode);
-
             }
         }
         stateSet.clear();
@@ -99,12 +99,17 @@ public abstract class SearchProcedure { // To be named strategy
         return null;
     }
 
+
+    public ArrayList<Operator> filterOperators(ArrayList<Operator> operators, StateObject stateObject) {
+
+        ArrayList<Operator> filteredOperators = new ArrayList<>();
+        for (Operator op : operators)
+            if (op.isActionDoable(stateObject))
+                filteredOperators.add(op);
+
+        return filteredOperators;
+    }
 }
-
-
-
-
-
 
 
 //                if(cnt++%1==0) {

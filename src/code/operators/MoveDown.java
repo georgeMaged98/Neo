@@ -1,4 +1,9 @@
-package code;
+package code.operators;
+
+import code.*;
+import code.structures.GridElement;
+import code.structures.Pos;
+import code.structures.StateObject;
 
 public class MoveDown extends Operator {
 
@@ -21,9 +26,9 @@ public class MoveDown extends Operator {
         Matrix currentMatrixProblem = this.getMatrix();
 
         // check if Neo is not facing a wall
-        if (currentMatrixProblem.isPosBeyondBorders(neoPos.x , neoPos.y - 1)) return false;
+        if (currentMatrixProblem.isPosBeyondBorders(neoPos.getX() , neoPos.getY() - 1)) return false;
 
-        GridElement downCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y - 1);
+        GridElement downCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY() - 1);
         // check if the down cell contains agent which is not killed
         if (currentStateObject.cellContainsAliveAgent(downCell))  return false;
 

@@ -1,8 +1,7 @@
 package code.SearchProcedures;
 
 import code.Matrix;
-import code.Node;
-import code.SearchProcedure;
+import code.generics.Node;
 
 import java.util.PriorityQueue;
 

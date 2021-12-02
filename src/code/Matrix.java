@@ -1,9 +1,11 @@
 package code;
 
-import code.SearchProcedures.BFS;
-import code.SearchProcedures.DFS;
-import code.SearchProcedures.IDS;
-import code.SearchProcedures.UCS;
+import code.SearchProcedures.*;
+import code.generics.Node;
+import code.generics.SearchProblem;
+import code.generics.State;
+import code.operators.*;
+import code.structures.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,14 +33,14 @@ public class Matrix extends SearchProblem {
     public String visualizeGridElement(GridElement gridElement, StateObject stateObject, boolean neoIsHere) {
         String ans = gridElement.toString();
 
-        if (gridElement.matrixObject == MatrixObject.HOSTAGE) {
-            int idx = gridElement.index;
+        if (gridElement.getMatrixObject() == MatrixObject.HOSTAGE) {
+            int idx = gridElement.getIndex();
             ans += " / " + stateObject.getDamage(idx) + " " + (stateObject.checkHostageKilled(idx) ? "(killed)" : ((stateObject.checkAgentTurned(idx) ? "(turned)" : stateObject.checkHostageCarried(idx) ? "(carried)" : (stateObject.checkHostageRescued(idx) ? "(rescued)" : ""))));
         }
-        if (gridElement.matrixObject == MatrixObject.AGENT)
-            ans += " / " + (stateObject.checkAgentKilled(gridElement.index) ? "(killed)" : "");
-        if (gridElement.matrixObject == MatrixObject.PILL)
-            ans += " / " + (stateObject.checkPillTaken(gridElement.index) ? "(taken)" : "");
+        if (gridElement.getMatrixObject() == MatrixObject.AGENT)
+            ans += " / " + (stateObject.checkAgentKilled(gridElement.getIndex()) ? "(killed)" : "");
+        if (gridElement.getMatrixObject() == MatrixObject.PILL)
+            ans += " / " + (stateObject.checkPillTaken(gridElement.getIndex()) ? "(taken)" : "");
 
         if (neoIsHere)
             ans += "--NEO";
@@ -115,8 +117,8 @@ public class Matrix extends SearchProblem {
         ArrayList<Operator> operators = new ArrayList<>();
         operators.add(new CarryHostage(0, this, "carry"));
         operators.add(new DropHostage(0, this, "drop"));
-        operators.add(new TakePill(0, this, "takePill"));
         operators.add(new KillAgent(0, this, "kill"));
+        operators.add(new TakePill(0, this, "takePill"));
         operators.add(new MoveLeft(0, this, "up"));
         operators.add(new MoveRight(0, this, "down"));
         operators.add(new MoveDown(0, this, "left"));
@@ -132,22 +134,22 @@ public class Matrix extends SearchProblem {
             for (int j = 0; j < height; j++)
                 grid[i][j] = new GridElement(MatrixObject.EMPTY, 0);
 
-        grid[telephonePos.x][telephonePos.y] = new GridElement(MatrixObject.TELEPHONE_BOOTH, 0);
+        grid[telephonePos.getX()][telephonePos.getY()] = new GridElement(MatrixObject.TELEPHONE_BOOTH, 0);
         for (int i = 0; i < agentsPos.length; i++) {
             Pos pos = agentsPos[i];
-            grid[pos.x][pos.y] = new GridElement(MatrixObject.AGENT, i);
+            grid[pos.getX()][pos.getY()] = new GridElement(MatrixObject.AGENT, i);
         }
         for (int i = 0; i < pillsPos.length; i++) {
             Pos pos = pillsPos[i];
-            grid[pos.x][pos.y] = new GridElement(MatrixObject.PILL, i);
+            grid[pos.getX()][pos.getY()] = new GridElement(MatrixObject.PILL, i);
         }
         for (int i = 0; i < startPadPos.length; i++) {
             Pos pos = startPadPos[i];
-            grid[pos.x][pos.y] = new GridElement(MatrixObject.PAD, i);
+            grid[pos.getX()][pos.getY()] = new GridElement(MatrixObject.PAD, i);
         }
         for (int i = 0; i < hostagePos.length; i++) {
             Pos pos = hostagePos[i];
-            grid[pos.x][pos.y] = new GridElement(MatrixObject.HOSTAGE, i);
+            grid[pos.getX()][pos.getY()] = new GridElement(MatrixObject.HOSTAGE, i);
         }
 
 
@@ -187,9 +189,8 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-     //   String str = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
-     //   System.out.println(solve(str, "BF", true));
-
+        String str = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
+        System.out.println(solve(str, "BF", true));
     }
 
     public boolean isNeoAtTB(StateObject stateObject) {
@@ -258,14 +259,13 @@ public class Matrix extends SearchProblem {
                 matrix.visualize(node.getState().getStateObject());
         }
         Collections.reverse(ans);
-
         String plan = State.mergeArray(ans, ",");
-        ans = new ArrayList<>();
-        ans.add(plan);
-        ans.add(outDeaths + "");
-        ans.add(outKills + "");
-        ans.add(nNodes + "");
-        return State.mergeArray(ans, ";");
+        CustomizedStringBuilder out = new CustomizedStringBuilder(";");
+        out.append(plan);
+        out.append(outDeaths + "");
+        out.append(outKills + "");
+        out.append(nNodes + "");
+        return out.getString();
     }
 
     private void fillStateObject(StateObject stateObject) {
@@ -289,5 +289,6 @@ public class Matrix extends SearchProblem {
     public boolean isPosBeyondBorders(int x, int y) {
         return x == -1 || y == -1 || x == width || y == height;
     }
+
 
 }

@@ -1,4 +1,6 @@
-package code;
+package code.generics;
+
+import code.operators.Operator;
 
 public class Node {
 

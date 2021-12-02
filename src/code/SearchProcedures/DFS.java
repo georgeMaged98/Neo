@@ -1,8 +1,7 @@
 package code.SearchProcedures;
 
-import code.Node;
-import code.SearchProblem;
-import code.SearchProcedure;
+import code.generics.Node;
+import code.generics.SearchProblem;
 
 import java.util.Stack;
 

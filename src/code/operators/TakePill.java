@@ -1,6 +1,11 @@
-package code;
+package code.operators;
 
-public class TakePill extends Operator{
+import code.*;
+import code.structures.GridElement;
+import code.structures.Pos;
+import code.structures.StateObject;
+
+public class TakePill extends Operator {
 
     public TakePill(long costValue, Matrix matrix, String name) {
         super(costValue, matrix, name);
@@ -11,9 +16,9 @@ public class TakePill extends Operator{
 
         Pos neoPos = currentStateObject.getNeoPos();
         Matrix currentMatrixProblem = this.getMatrix();
-        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y);
+        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY());
 
-        currentStateObject.takePill(currentCell.index);
+        currentStateObject.takePill(currentCell.getIndex());
     }
 
     @Override
@@ -23,7 +28,7 @@ public class TakePill extends Operator{
 
         Matrix currentMatrixProblem = this.getMatrix();
 
-        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.x, neoPos.y);
+        GridElement currentCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY());
 
         // check if there is a pill in the current cell
         if(!currentStateObject.cellContainsPill(currentCell)) return false;
