@@ -19,7 +19,7 @@ public class State {
     }
 
     private String data;
-    private int nHostage, nPills, nAgents,nKills,nDeaths;
+    private int nHostage, nPills, nAgents,nKills,nDeaths, nKillRescued;
 
     public State(StateObject stateObject) {
         nHostage = stateObject.getHostagesNum();
@@ -27,6 +27,7 @@ public class State {
         nPills = stateObject.getPillsNum();
         nKills=stateObject.getnKills();
         nDeaths=stateObject.getnDeaths();
+        nKillRescued=stateObject.getnKillRescued();
         ArrayList<String> ans = new ArrayList<>();
         ans.add(getNeoPosString(stateObject));
         ans.add(getKilledAgentsString(stateObject));
@@ -42,7 +43,20 @@ public class State {
         for (int i = 0; i <arr.length ; i++)
             if(i!=2)
                 ans.add(arr[i]);
+
+        int[] damage = getDamageHostages(arr[2]);
+        boolean []isCarried=getCarriedHostages(arr[3]);
+        boolean[]isRescued=getRescuedHostages(arr[5]);
+        boolean[]isTurnedAgent=getTurnedAgents(damage,isCarried,isRescued);
+        ans.add(getIsTurnedString(isTurnedAgent));
         return mergeArray(ans,";");
+    }
+    public String getIsTurnedString(boolean[]isTurned){
+        ArrayList<String>ans=new ArrayList<>();
+        for (int i = 0; i < isTurned.length; i++)
+            if(isTurned[i])
+                ans.add(i+"");
+        return mergeArray(ans,",");
     }
     public StateObject getStateObject() {
 
@@ -57,6 +71,7 @@ public class State {
             int[] damage = getDamageHostages(stateArray[2]);
             stateObject.setHostageDamage(damage);
             boolean []isCarried=getCarriedHostages(stateArray[3]);
+            stateObject.setnCarried(stateArray[3].length());
             stateObject.setIsHostageCarried(isCarried);
 
 
@@ -66,7 +81,7 @@ public class State {
              stateObject.setIsTurnedAgent(getTurnedAgents(damage,isCarried,isRescued));
 
         stateObject.setnDeaths(nDeaths);
-
+        stateObject.setnKillRescued(nKillRescued);
         return stateObject;
     }
 

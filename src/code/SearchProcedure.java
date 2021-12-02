@@ -1,6 +1,6 @@
 package code;
-import java.io.FileWriter;   // Import the FileWriter class
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,29 +47,34 @@ public abstract class SearchProcedure { // To be named strategy
     public void addToDuplicateSet(State state) {
         stateSet.add(state.getPrimaryState());
     }
+
     public Node search(Node root) throws IOException {
         FileWriter myWriter = new FileWriter("trace.txt");
-       long cnt=0;
+        long cnt = 0;
 
         // 1. enqueue root
         nExpandedNodes = 0;
         enqueue(root);
-
+        boolean firstTime = true;
         while (!isEmpty()) {
             // dequeue front node
             Node node = dequeue();
 
-
             State currentState = node.getState();
+            StateObject stateObject = currentState.getStateObject();
+
             addToDuplicateSet(node.getState());
-            if (problem.goalTest(currentState))
+            if (problem.goalTest(stateObject))
                 return node;
 
             incrementNodes();
 
             ArrayList<Operator> operators = problem.getOperators();
             for (Operator operator : operators) {
-                StateObject stateObject = currentState.getStateObject();
+                if (!firstTime)
+                    stateObject = currentState.getStateObject();
+                else
+                    firstTime = false;
 
 
                 // check for valid operators
@@ -84,13 +89,7 @@ public abstract class SearchProcedure { // To be named strategy
                 // Check for duplicate states
                 if (outputNode == null || stateSet.contains(outputNode.getState().getPrimaryState()))
                     continue;
-//                if(cnt++%1==0) {
-                    myWriter.write("------------new State -----------------------\n\n\n");
-                    myWriter.write(stateObject + "\n\n");
-                //    myWriter.write(Matrix.prepareOutput(outputNode, nExpandedNodes,false) + "\n\n");
 
-                    myWriter.write("------------end State -----------------------\n\n\n");
-       //         }
                 enqueue(outputNode);
 
             }
@@ -101,3 +100,17 @@ public abstract class SearchProcedure { // To be named strategy
     }
 
 }
+
+
+
+
+
+
+
+//                if(cnt++%1==0) {
+//      myWriter.write("------------new State -----------------------\n\n\n");
+//    myWriter.write(stateObject + "\n\n");
+//    myWriter.write(Matrix.prepareOutput(outputNode, nExpandedNodes,false) + "\n\n");
+
+//     myWriter.write("------------end State -----------------------\n\n\n");
+//         }

@@ -1,4 +1,8 @@
-package code;
+package code.SearchProcedures;
+
+import code.Node;
+import code.SearchProblem;
+import code.SearchProcedure;
 
 import java.util.*;
 

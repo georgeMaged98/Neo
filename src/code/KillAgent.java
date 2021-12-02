@@ -21,22 +21,18 @@ public class KillAgent extends Operator {
         // turn neighboring agents or neighboring turned agents to killed
         for (int i = 0; i < 4; i++) {
 
-
             boolean isWrongMove = currentMatrixProblem.isPosBeyondBorders(neoPos.x + dx[i], neoPos.y + dy[i]);
-
             if (isWrongMove) continue;
             GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + dx[i], neoPos.y + dy[i]);
             // kill agent in cell
-            if (currentStateObject.cellContainsAliveAgent(cell)) {
+            if (currentStateObject.cellContainsAliveAgent(cell))
                 currentStateObject.killAgent(cell);
 
-            }
 
-
-            if (currentStateObject.cellContainsTurnedAliveAgent(cell)) {
+            if (currentStateObject.cellContainsTurnedAliveAgent(cell))
                 // kill turned agent in cell
                 currentStateObject.killTurnedAgent(cell);
-            }
+
 
         }
 
@@ -52,9 +48,9 @@ public class KillAgent extends Operator {
         for (int i = 0; i < 4; i++) {
             boolean isWrongMove = currentMatrixProblem.isPosBeyondBorders(neoPos.x + dx[i], neoPos.y + dy[i]);
             if (isWrongMove) continue;
-                GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + dx[i], neoPos.y + dy[i]);
-                if (currentStateObject.cellContainsAliveAgent(cell) || currentStateObject.cellContainsTurnedAliveAgent(cell))
-                    return true;
+            GridElement cell = currentMatrixProblem.getGridElement(neoPos.x + dx[i], neoPos.y + dy[i]);
+            if (currentStateObject.cellContainsAliveAgent(cell) || currentStateObject.cellContainsTurnedAliveAgent(cell))
+                return true;
 
 
         }

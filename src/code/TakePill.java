@@ -28,6 +28,6 @@ public class TakePill extends Operator{
         // check if there is a pill in the current cell
         if(!currentStateObject.cellContainsPill(currentCell)) return false;
 
-        return false;
+        return true;
     }
 }

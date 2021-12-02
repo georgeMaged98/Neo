@@ -1,5 +1,10 @@
 package code;
 
+import code.SearchProcedures.BFS;
+import code.SearchProcedures.DFS;
+import code.SearchProcedures.IDS;
+import code.SearchProcedures.UCS;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -190,14 +195,9 @@ public class Matrix extends SearchProblem {
         return stateObject.getNeoPos().equals(telephonePos);
     }
 
-    public boolean goalTest(State s) {
+    public boolean goalTest(StateObject stateObject) {
 
-        StateObject stateObject = s.getStateObject();
-        for (int i = 0; i < hostagePos.length; i++)
-            if (!stateObject.checkHostageRescuedOrKilled(i))
-                return false;
-
-        return isNeoAtTB(stateObject);
+        return isNeoAtTB(stateObject) && stateObject.getnKillRescued() == hostagePos.length;
     }
 
     public static SearchProcedure getSearchProc(String strategy, Matrix matrix) {
@@ -225,8 +225,8 @@ public class Matrix extends SearchProblem {
         if (answer == null)
             return "No Solution";
         int nNodes = searchProcedure.getnExpandedNodes();
-        String out=prepareOutput(answer, nNodes, visualize);
-        if(visualize)
+        String out = prepareOutput(answer, nNodes, visualize);
+        if (visualize)
             myWriter.close();
 
         return out;
@@ -236,12 +236,12 @@ public class Matrix extends SearchProblem {
         // plan --> deaths--> kills --> Nodes
         Matrix matrix = goal.getOperator().getMatrix();
         Node node = goal;
-        int outKills=node.getnKills();
-        int outDeaths=node.getnDeathes();
+        int outKills = node.getnKills();
+        int outDeaths = node.getnDeathes();
         ArrayList<String> ans = new ArrayList<>();
         if (visualize) {
             myWriter = new FileWriter("traceVisualize.txt");
-       //     myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
+            //     myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
             matrix.visualize(node.getState().getStateObject());
         }
         while (node.getParentNode() != null) {
@@ -249,7 +249,7 @@ public class Matrix extends SearchProblem {
             String s = node.getOperator().getName();
             if (visualize) {
                 myWriter.write("--------------------------" + s + "---------------------------------------------" + s + "--------\n\n\n");
-      //          myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
+                //          myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
 
             }
             node = node.getParentNode();

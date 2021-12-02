@@ -14,7 +14,21 @@ public class StateObject {
     private int nKills;
     private int nDeaths;
     private int neoDamage;
+    private int nKillRescued;
 
+    public int getnKillRescued() {
+        return nKillRescued;
+    }
+
+    public void setnKillRescued(int nKillRescued) {
+        this.nKillRescued = nKillRescued;
+    }
+
+    public void setnCarried(int nCarried) {
+        this.nCarried = nCarried;
+    }
+
+    private int nCarried;
     public int getHostagesNum() {
         return hostageDamage.length;
     }
@@ -39,17 +53,12 @@ public class StateObject {
     }
 
     public int getCarriedHostagesNum() {
-        int count = 0;
-        for (boolean isCarried : isHostageCarried) {
-            if (isCarried)
-                count++;
-        }
-        return count;
+        return nCarried;
     }
+
     public boolean checkPillTaken(int idx){
         return isPillTaken[idx];
     }
-    // TODO ?????????????????????????????????????????????????????????????????????????????????
     public boolean checkHostageDeadCarried(int idx) {
         return !isTurnedAgent[idx] && hostageDamage[idx] == 100;
     }
@@ -254,6 +263,7 @@ public class StateObject {
             if (isHostageCarried[i]) {
                 isHostageCarried[i] = false;
                 isRescuedHostage[i] = true;
+                nKillRescued++;
             }
         }
     }
@@ -270,6 +280,7 @@ public class StateObject {
         hostageDamage[idx] = -1;
         nKills++;
         nDeaths++;
+        nKillRescued++;
 
     }
 

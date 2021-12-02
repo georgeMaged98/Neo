@@ -17,7 +17,7 @@ public class MoveLeft extends Operator{
 
         Pos neoPos = currentStateObject.getNeoPos();
 
-        Matrix currentMatrixProblem = this.getMatrix();
+        Matrix currentMatrixProblem = getMatrix();
 
         // check if Neo is not facing a wall
         if (currentMatrixProblem.isPosBeyondBorders(neoPos.x - 1, neoPos.y)) return false;

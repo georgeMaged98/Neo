@@ -6,7 +6,7 @@ public abstract class SearchProblem {
 	private ArrayList<Operator> operators;
 	private State intialState;
 
-	public abstract boolean goalTest(State s);
+	public abstract boolean goalTest(StateObject s);
 
 	public State getIntialState() {
 		return intialState;
