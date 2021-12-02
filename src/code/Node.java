@@ -11,6 +11,25 @@ public class Node {
     private int nDeathes;
     private long pathCost;
 
+    public int getExpectedDeaths() {
+        return expectedDeaths;
+    }
+
+    public void setExpectedDeaths(int expectedDeaths) {
+        this.expectedDeaths = expectedDeaths;
+    }
+
+    public int getExpectedKills() {
+        return expectedKills;
+    }
+
+    public void setExpectedKills(int expectedKills) {
+        this.expectedKills = expectedKills;
+    }
+
+    private int expectedDeaths;
+    private int expectedKills;
+
     public int getnKills() {
         return nKills;
     }
