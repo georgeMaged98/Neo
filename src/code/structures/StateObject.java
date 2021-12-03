@@ -8,7 +8,6 @@ import java.util.StringTokenizer;
 public class StateObject {
 
     private Pos neoPos; //1
-
     private boolean[] isAgentKilled;// 1 2,4,5
     private int[] hostageDamage; //0
     private boolean[] isHostageCarried;//0

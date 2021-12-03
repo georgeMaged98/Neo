@@ -1,125 +1,136 @@
 package code;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import code.generics.Node;
+import code.generics.State;
+import code.structures.CustomizedStringBuilder;
+import code.structures.StateObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class GenGrid {
+
+    public static void main(String[] args) throws IOException {
+        System.out.println(genGrid());
+        Matrix matrix = new Matrix(genGrid());
+        StateObject stateObject = matrix.fillStateObject();
+
+        Matrix.myWriter = new FileWriter("genGrid.txt");
+        matrix.visualize(stateObject);
+
+        Matrix.myWriter.close();
+
+    }
+
     public static String genGrid() {
-        String grid="";
-        String hostages = "";
-        String pills = "";
+
+        CustomizedStringBuilder generatedGrid = new CustomizedStringBuilder(";");
 
 
-
-
-
-        Random rand = new Random();
-        int numberOfHostagesCarried =(int) Math.floor(Math.random() * (4 - 1 + 1) + 1);
         int minDimension = 5;
-        int maxDimension = 15;
-        int gridXDimension = (int) Math.floor(Math.random() * (maxDimension - minDimension + 1) + minDimension);
-        int  gridYDimension = (int) Math.floor(Math.random() * (maxDimension - minDimension + 1) + minDimension);
-        List<String> indicies = new ArrayList<String>();
-        for (int i = 0; i < gridXDimension; i++) {
+        int maxDimension = 5;
+        int gridXDimension = generateRandomWithinRange(minDimension, maxDimension);
+        int gridYDimension = generateRandomWithinRange(minDimension, maxDimension);
+
+        generatedGrid.append(gridXDimension + "," + gridYDimension);
+        int numberOfHostagesCarried = generateRandomWithinRange(1, 4);
+
+        generatedGrid.append(numberOfHostagesCarried + "");
+
+        Queue<String> indices = initializeArrayWithPositions(gridXDimension, gridYDimension);
 
 
-            for (int j = 0; j < gridYDimension; j++) {
-                indicies.add(Integer.toString(i) + Integer.toString(j));
+        String neoPos = indices.poll();
+        generatedGrid.append(neoPos);
 
-            }
+        String telePos = indices.poll();
+        generatedGrid.append(telePos);
 
-        }
+        int numberOfHostages = generateRandomWithinRange(3, 10);
+        int numberOfPills = generateRandomWithinRange(1, numberOfHostages);
 
-        grid+=gridXDimension+","+gridYDimension+";";
-        grid+=Integer.toString(numberOfHostagesCarried)+";";
-        int randNeoPos = rand.nextInt(indicies.size());
-        String neoPos = indicies.get(randNeoPos);
-        indicies.remove(randNeoPos);
-        grid+= neoPos.charAt(0)+","+neoPos.charAt(1)+";";
+        // generate pills
+        CustomizedStringBuilder pills = new CustomizedStringBuilder(",");
+        for (int i = 0; i < numberOfPills; i++)
+            pills.append(indices.poll());
 
-
-        int randTelephonePos = rand.nextInt(indicies.size());
-        String telePos = indicies.get(randTelephonePos);
-        indicies.remove(randTelephonePos);
-        grid+= telePos.charAt(0)+","+telePos.charAt(1)+";";
-
-
-
-
-
-
-        int numberOfHostages = (int) Math.floor(Math.random() * (10 - 3 + 1) + 3);
-        int numberOfPills = (int) Math.floor(Math.random() * (numberOfHostages - 1 + 1) + 1);
-
-        for (int i = 0;i<numberOfPills;i++){
-            int randPillPos = rand.nextInt(indicies.size());
-            String pillPos = indicies.get(randPillPos);
-            indicies.remove(randPillPos);
-            if(i!=numberOfPills-1){
-                pills+= pillPos.charAt(0)+","+pillPos.charAt(1)+",";}
-            else {
-                pills+= pillPos.charAt(0)+","+pillPos.charAt(1)+";";
-            }
-
+        // generate hostages
+        CustomizedStringBuilder hostages = new CustomizedStringBuilder(",");
+        for (int i = 0; i < numberOfHostages; i++) {
+            int randHostageDamage = generateRandomWithinRange(1, 99);
+            hostages.append(indices.poll() + "," + randHostageDamage);
         }
 
 
+        int numberOfAgents = getAgentsNum();
 
-        for(int i = 0;i<numberOfHostages;i++){
-            int randHostageDamage = (int) Math.floor(Math.random() * (99 - 1 + 1) + 1);
+        CustomizedStringBuilder agents = new CustomizedStringBuilder(",");
+        for (int i = 0; i < numberOfAgents; i++)
+            agents.append(indices.poll());
 
-            int randHostagePos = rand.nextInt(indicies.size());
-            String hostagePos = indicies.get(randHostagePos);
-            indicies.remove(randHostagePos);
 
-            if(i!=numberOfHostages-1){
-                hostages+= hostagePos.charAt(0)+","+hostagePos.charAt(1)+","+Integer.toString(randHostageDamage)+",";}
-            else {
-                hostages+= hostagePos.charAt(0)+","+hostagePos.charAt(1)+","+Integer.toString(randHostageDamage);
-            }
+        int maxPairs = indices.size() / 4;
 
+        int numberOfPadPais = generateRandomWithinRange(1, maxPairs<1?1:maxPairs);
+
+        // generate pads
+        CustomizedStringBuilder pads = new CustomizedStringBuilder(",");
+        for (int i = 0; i < numberOfPadPais; i++) {
+            String startPad = indices.poll();
+            String finishPad = indices.poll();
+            pads.append(startPad + "," + finishPad);
+            pads.append(finishPad + "," + startPad);
         }
 
-        grid+=pills;
+        generatedGrid.append(agents.getString());
+        generatedGrid.append(pills.getString());
+        generatedGrid.append(pads.getString());
+        generatedGrid.append(hostages.getString());
 
-        int numberOfPads = 2+rand.nextInt((indicies.size()-2)/2) *2;
+        return generatedGrid.getString();
 
+    }
 
-
-
-        for(int i = 0 ;i<numberOfPads;i++){
-            int randPadPos = rand.nextInt(indicies.size());
-            String padPos = indicies.get(randPadPos);
-            indicies.remove(randPadPos);
-            if(i!=numberOfPads-1){
-                grid+= padPos.charAt(0)+","+padPos.charAt(1)+",";}
-            else {
-                grid+= padPos.charAt(0)+","+padPos.charAt(1)+";";
-            }
-
-
+    public static int getAgentsNum() {
+        int cnt = 10;
+        int num = 1;
+        while (cnt-- > 0) {
+            if (generateRandomWithinRange(0, 1) == 1)
+                return num;
+            num++;
         }
-        int numberOfAgents = indicies.size()/2;
+        return num;
+    }
 
-        for(int i = 0 ;i<numberOfAgents;i++){
-            int randAgentPos = rand.nextInt(indicies.size()/2);
-            String agentPos = indicies.get(randAgentPos);
-            indicies.remove(randAgentPos);
-            if(i!=numberOfAgents-1){
-                grid+= agentPos.charAt(0)+","+agentPos.charAt(1)+",";}
-            else {
-                grid+= agentPos.charAt(0)+","+agentPos.charAt(1)+";";
-            }
+    public static int generateRandomWithinRange(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt(max - min + 1) + min;
+    }
 
 
-        }
-        grid+=hostages;
+    public static Queue<String> initializeArrayWithPositions(int x, int y) {
 
-        return grid;
+        ArrayList<String> indices = new ArrayList<>();
+        // initialize array with all possible positions
+        for (int i = 0; i < x; i++)
+            for (int j = 0; j < y; j++)
+                indices.add(i + "," + j);
 
+        Collections.shuffle(indices);
+        int size = indices.size();
+        Queue<String> shuffledIndices = new LinkedList<>();
+        for (int i = 0; i < size; i++)
+            shuffledIndices.add(indices.get(i));
 
+        return shuffledIndices;
+    }
 
-
+    public static String getRandomPos(ArrayList<String> positions) {
+        Random rand = new Random();
+        int idx = rand.nextInt(positions.size());
+        String pos = positions.get(idx);
+        positions.remove(pos);
+        return pos;
     }
 }

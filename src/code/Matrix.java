@@ -18,7 +18,6 @@ public class Matrix extends SearchProblem {
     private int maxCarry;
     private int width, height;
     private Pos neoPos;
-
     private Pos telephonePos;
     private Pos[] agentsPos, pillsPos, startPadPos, finishPadPos, hostagePos;
 
@@ -100,7 +99,6 @@ public class Matrix extends SearchProblem {
 
     private int[] hostageDamage;
 
-
     public Matrix(String grid) {
         StringTokenizer st = new StringTokenizer(grid.replace(";", " "));
         String[] dimensions = st.nextToken().split(",", -1);
@@ -123,6 +121,7 @@ public class Matrix extends SearchProblem {
         initializeOperator();
     }
 
+
     public void initializeOperator() {
         ArrayList<Operator> operators = new ArrayList<>();
         operators.add(new CarryHostage(0, this, "carry"));
@@ -136,7 +135,9 @@ public class Matrix extends SearchProblem {
         operators.add(new Fly(0, this, "fly"));
         Collections.reverse(operators);
         setOperators(operators);
+
     }
+
 
     public void fillMatrix() {
         grid = new GridElement[width][height];
@@ -198,8 +199,10 @@ public class Matrix extends SearchProblem {
 
     public static void main(String[] args) throws IOException {
 
-        String str = "5,5;2;3,4;1,2;0,3,1,4;2,3;4,4,0,2,0,2,4,4;2,2,91,2,4,62";
-        System.out.println(solve(str, "BF", true));
+//        String str = GenGrid.genGrid();
+        String str = "5,5;3;0,3;2,2;1,2;1,3,4,0,1,1,3,0;1,4,3,4,3,4,1,4,0,0,2,4,2,4,0,0;4,4,67,3,2,94,3,1,94,2,3,14,0,2,13,4,1,93";
+
+        System.out.println(solve(str, "GR2", true));
     }
 
     public boolean isNeoAtTB(StateObject stateObject) {
@@ -269,7 +272,6 @@ public class Matrix extends SearchProblem {
             if (visualize) {
                 myWriter.write("--------------------------" + s + "---------------------------------------------" + s + "--------\n\n\n");
                 //          myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
-
             }
             node = node.getParentNode();
             if (visualize)
@@ -285,7 +287,7 @@ public class Matrix extends SearchProblem {
         return out.getString();
     }
 
-    private StateObject fillStateObject() {
+    public StateObject fillStateObject() {
         boolean[] killedAgents = new boolean[agentsPos.length];
         int[] damage = hostageDamage;
         boolean[] isCarried = new boolean[hostagePos.length];

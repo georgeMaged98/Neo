@@ -1,9 +1,10 @@
 package code.structures;
 
-public class Pos {
+public class Pos implements Comparable<Pos> {
 
     private int x;
     private int y;
+
 
     @Override
     public boolean equals(Object o) {
@@ -40,5 +41,12 @@ public class Pos {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public int compareTo(Pos o) {
+        if (x == o.x)
+            return y - o.y;
+        return x - o.x;
     }
 }

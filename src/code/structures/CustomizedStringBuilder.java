@@ -20,4 +20,7 @@ public class CustomizedStringBuilder {
         return sb.toString();
     }
 
+    public void clear() {
+        sb.setLength(0);
+    }
 }

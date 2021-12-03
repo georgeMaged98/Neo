@@ -76,7 +76,7 @@ public abstract class SearchProcedure { // To be named strategy
             incrementNodes();
 
             // check for valid operators
-            ArrayList<Operator> filteredOperators = filterOperators(problem.getOperators(), stateObject);
+            ArrayList<Operator> filteredOperators = filterOperators(problem.getOperators(), stateObject, node);
 
             for (Operator operator : filteredOperators) {
                 stateObject = currentState.getStateObject();
@@ -94,23 +94,43 @@ public abstract class SearchProcedure { // To be named strategy
             }
         }
         stateSet.clear();
-        myWriter.close();
+//        myWriter.close();
         return null;
     }
 
 
-    public ArrayList<Operator> filterOperators(ArrayList<Operator> operators, StateObject stateObject) {
+    public ArrayList<Operator> filterOperators(ArrayList<Operator> operators, StateObject stateObject, Node prevNode) {
 
         ArrayList<Operator> filteredOperators = new ArrayList<>();
-        for (Operator op : operators)
-            if (op.isActionDoable(stateObject))
+        for (Operator op : operators) {
+            if (op.isActionDoable(stateObject) && !checkOppMoves(prevNode, op))
                 filteredOperators.add(op);
-
+        }
         return filteredOperators;
     }
+
+    public static boolean checkOppMoves(Node prevNode, Operator op) {
+
+        // check root
+        if(prevNode.getOperator() == null) return false;
+
+        if (prevNode.getOperator().getName().equals("up") && op.getName().equals("down"))
+            return true;
+
+        if (prevNode.getOperator().getName().equals("down") && op.getName().equals("up"))
+            return true;
+
+        if (prevNode.getOperator().getName().equals("right") && op.getName().equals("left"))
+            return true;
+
+        if (prevNode.getOperator().getName().equals("left") && op.getName().equals("right"))
+            return true;
+
+        return false;
+
+    }
+
 }
-
-
 //                if(cnt++%1==0) {
 //      myWriter.write("------------new State -----------------------\n\n\n");
 //    myWriter.write(stateObject + "\n\n");
