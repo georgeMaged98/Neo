@@ -6,10 +6,10 @@ import java.util.Arrays;
 
 public class StateObject {
 
-    private Pos neoPos;
-    private boolean[] isAgentKilled;
-    private int[] hostageDamage;
-    private boolean[] isHostageCarried;
+    private Pos neoPos; //1
+    private boolean[] isAgentKilled;// 1 2,4,5
+    private int[] hostageDamage; //0
+    private boolean[] isHostageCarried;//0
     private boolean[] isTurnedAgent;
     private boolean[] isPillTaken;
     private boolean[] isRescuedHostage;
@@ -18,6 +18,12 @@ public class StateObject {
     private int neoDamage;
     private int nKillRescued;
 
+    public int getPillEffect(){
+        int ans=0;
+        for(boolean isPillTaken:isPillTaken)
+            if(isPillTaken)ans+=20;
+        return ans;
+    }
     public int getnKillRescued() {
         return nKillRescued;
     }
@@ -258,7 +264,7 @@ public class StateObject {
         isPillTaken[idx] = true;
     }
 
-    private boolean checkHostageAlive(int idx) {
+    public boolean checkHostageAlive(int idx) {
         return !checkAgentTurned(idx) && !checkHostageRescued(idx) && !checkHostageDeadCarried(idx);
     }
 

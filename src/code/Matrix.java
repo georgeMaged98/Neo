@@ -17,9 +17,16 @@ public class Matrix extends SearchProblem {
     private GridElement[][] grid;
     private int maxCarry;
     private int width, height;
-    private Pos neoPos, telephonePos;
-    private Pos[] agentsPos, pillsPos, startPadPos, finishPadPos, hostagePos;
+    private Pos neoPos;
 
+    private Pos telephonePos;
+    private Pos[] agentsPos, pillsPos, startPadPos, finishPadPos, hostagePos;
+    public Pos getTelephonePos() {
+        return telephonePos;
+    }
+    public Pos getHostagePos(int idx){
+        return hostagePos[idx];
+    }
     static FileWriter myWriter;
 
     public static String fill(String s, int len) {
@@ -189,7 +196,7 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-        String str = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
+        String str = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
         System.out.println(solve(str, "BF", true));
     }
 
@@ -211,6 +218,14 @@ public class Matrix extends SearchProblem {
             return new UCS(matrix);
         if (strategy.equals("ID"))
             return new IDS(matrix);
+        if(strategy.equals("GR1"))
+            return new GR1(matrix);
+        if(strategy.equals("AS1"))
+            return new GR1(matrix);
+        if(strategy.equals("GR2"))
+            return new GR2(matrix);
+        if(strategy.equals("AS2"))
+            return new GR2(matrix);
         return null;
     }
 
