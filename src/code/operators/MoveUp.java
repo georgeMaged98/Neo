@@ -1,6 +1,6 @@
 package code.operators;
 
-import code.*;
+import code.Matrix;
 import code.structures.GridElement;
 import code.structures.Pos;
 import code.structures.StateObject;
@@ -35,8 +35,7 @@ public class MoveUp extends Operator {
         // check if the up cell contains hostage which is turned to agent and not yet killed
         if (currentStateObject.cellContainsTurnedAliveAgent(upCell)) return false;
 
-
-        if(currentStateObject.cellContainsHostageWith98Damage(upCell)) return false;
+        if (currentStateObject.cellContainsHostageWith98Damage(upCell)) return false;
 
         return true;
     }

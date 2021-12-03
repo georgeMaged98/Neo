@@ -39,8 +39,6 @@ public class State {
         ans.append(getCarriedHostagesString(stateObject));
         ans.append(getTakenPillsString(stateObject));
         ans.append(getRescuedHostagesString(stateObject));
-//        ans.append(getTurnedAgentsString(stateObject));
-
         data = ans.getString();
     }
 
@@ -74,68 +72,29 @@ public class State {
 
     public StateObject getStateObject() {
 
-
         String[] stateArray = data.split(";", -1);
-
-//        String neoDetailsString = st.nextToken();
-//
-//        String isAgentKilledString = st.nextToken();
-//        String damageString = st.nextToken();
-//        String isCarriedString = st.nextToken();
-//        String isPillTakenString = st.nextToken();
-//        String isHostageRescuedString = st.nextToken();
 
         Object[] neoDetails = getNeoDetails(stateArray[0]);
         Pos neoPos = (Pos) neoDetails[0];
         int neoDamage = (Integer) neoDetails[1];
         boolean[] killedAgents = getKilledAgents(stateArray[1]);
         int[] damage = getDamageHostages(stateArray[2]);
+
         boolean[] isCarried = getCarriedHostages(stateArray[3]);
         int nCarried = stateArray[3].length();
         boolean[] isPillTaken = getTakenPills(stateArray[4]);
         boolean[] isRescued = getRescuedHostages(stateArray[5]);
-//        boolean[] isTurned = getTurnedAgents(stateArray[6]);
+
         boolean[] isTurnedAgent = getTurnedAgents(damage, isCarried, isRescued);
 
         StateObject stateObject = new StateObject(neoPos, killedAgents, damage, isCarried, isTurnedAgent, isPillTaken, isRescued, nKills, nDeaths, neoDamage, nKillRescued, nCarried);
 
         return stateObject;
-
-//        StringTokenizer st = new StringTokenizer(data, ";", true);
-
-//        System.out.println(st.countTokens());
-//
-//        String neoDetailsString = st.nextToken();
-//
-//        String isAgentKilledString = st.nextToken();
-//        String damageString = st.nextToken();
-//        String isCarriedString = st.nextToken();
-//        String isPillTakenString = st.nextToken();
-//        String isHostageRescuedString = st.nextToken();
-//
-//
-//
-//        Object[] neoDetails = getNeoDetails(neoDetailsString);
-//        Pos neoPos = (Pos) neoDetails[0];
-//        int neoDamage = (Integer) neoDetails[1];
-//        boolean[] killedAgents = getKilledAgents(isAgentKilledString);
-//        int[] damage = getDamageHostages(damageString);
-//
-//        boolean[] isCarried = getCarriedHostages(isCarriedString);
-//        int nCarried = isCarriedString.length();
-//        boolean[] isPillTaken = getTakenPills(isPillTakenString);
-//        boolean[] isRescued = getRescuedHostages(isHostageRescuedString);
-//        boolean[] isTurnedAgent = getTurnedAgents(damage, isCarried, isRescued);
-//
-//        StateObject stateObject = new StateObject(neoPos, killedAgents, damage, isCarried, isTurnedAgent, isPillTaken, isRescued, nKills, nDeaths, neoDamage, nKillRescued, nCarried);
-//
-//        return stateObject;
     }
 
     public Object[] getNeoDetails(String neoDetails) {
         Object[] out = new Object[2];
         StringTokenizer st = new StringTokenizer(neoDetails, ",");
-
         int x = Integer.parseInt(st.nextToken());
         int y = Integer.parseInt(st.nextToken());
         int damage = Integer.parseInt(st.nextToken());
@@ -155,6 +114,20 @@ public class State {
         sb.append(neoDamage);
         return sb.toString();
 
+    }
+
+    public Pos getNeoPos(String posString) {
+        String[] coordinates = posString.split(",", -1);
+        int x = Integer.parseInt(coordinates[0]);
+        int y = Integer.parseInt(coordinates[1]);
+        return new Pos(x, y);
+    }
+
+    public int getNeoDamage(String neoString) {
+        String[] neoStringArr = neoString.split(",", -1);
+        int damage = Integer.parseInt(neoStringArr[2]);
+
+        return damage;
     }
 
 
@@ -180,13 +153,17 @@ public class State {
     }
 
     public boolean[] getKilledAgents(String killedAgentsString) {
-        StringTokenizer st = new StringTokenizer(killedAgentsString, ",");
+        String[] killedAgentsArr = killedAgentsString.split(",", -1);
         boolean[] killedAgents = new boolean[nAgents];
-        if (st.countTokens() > 0) {
-            while (st.hasMoreTokens()) {
-                String killedAgent = st.nextToken();
-                int idx = Integer.parseInt(killedAgent);
-                killedAgents[idx] = true;
+        if (killedAgentsString.length() > 0) {
+            for (String killedAgent : killedAgentsArr) {
+                try {
+                    int idx = Integer.parseInt(killedAgent);
+                    killedAgents[idx] = true;
+                } catch (Exception e) {
+                    System.out.println(this);
+                    throw e;
+                }
             }
         }
         return killedAgents;
@@ -204,14 +181,14 @@ public class State {
     }
 
     public int[] getDamageHostages(String DamageString) {
-
-        StringTokenizer st = new StringTokenizer(DamageString, ",");
+        String[] damageArray = DamageString.split(",", -1);
         int[] damage = new int[nHostage];
         if (DamageString.length() > 0) {
-            for (int i = 0; i < nHostage; i++) {
-                int healthValue = Integer.parseInt(st.nextToken());
+            for (int i = 0; i < damageArray.length; i++) {
+                int healthValue = Integer.parseInt(damageArray[i]);
                 damage[i] = healthValue;
             }
+
         }
         return damage;
     }
@@ -233,7 +210,6 @@ public class State {
         }
         return carriedHostages;
     }
-
 
     public boolean[] getTurnedAgents(int[] damage, boolean[] isCarried, boolean[] isRescued) {
         boolean[] isTurnedAgent = new boolean[nHostage];
@@ -273,15 +249,6 @@ public class State {
         return ans.getString();
     }
 
-    public String getTurnedAgentsString(StateObject stateObject) {
-        boolean[] turnedAgents = stateObject.getIsTurnedAgent();
-        CustomizedStringBuilder ans = new CustomizedStringBuilder("");
-        for (int i = 0; i < turnedAgents.length; i++)
-            if (turnedAgents[i])
-                ans.append(i + "");
-        return ans.getString();
-    }
-
     public boolean[] getRescuedHostages(String rescuedHostageString) {
         boolean[] rescuedHostages = new boolean[nHostage];
         for (int i = 0; i < rescuedHostageString.length(); i++) {
@@ -291,17 +258,18 @@ public class State {
         return rescuedHostages;
     }
 
-    public boolean[] getTurnedAgents(String turnedAgentString) {
-        boolean[] turnedAgents = new boolean[nAgents];
-        for (int i = 0; i < turnedAgentString.length(); i++) {
-            int idx = Integer.parseInt(turnedAgentString.charAt(i) + "");
-            turnedAgents[idx] = true;
-        }
-        return turnedAgents;
+    public int getNumKilledAgents(String killedAgentsString) {
+        if (killedAgentsString.length() == 0) return 0;
+        String[] killedAgentsArr = killedAgentsString.split(",", -1);
+        return killedAgentsArr.length;
     }
 
 
-
+    public int getNumRescuedHostages(String rescuedHostageString) {
+        if (rescuedHostageString.length() == 0) return 0;
+        String[] rescuedHostagesArr = rescuedHostageString.split(",", -1);
+        return rescuedHostagesArr.length;
+    }
 
     public String getKilledHostages(int[] damage) {
         StringBuilder sb = new StringBuilder();
@@ -309,11 +277,5 @@ public class State {
             if (damage[i] == -1) sb.append(i);
 
         return sb.toString();
-    }
-
-    public String verifyToken(String str, String dem){
-        if(str.equals(dem))
-            return "";
-        return str;
     }
 }

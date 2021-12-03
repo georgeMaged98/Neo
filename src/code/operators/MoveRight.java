@@ -34,6 +34,7 @@ public class MoveRight extends Operator {
         if (currentStateObject.cellContainsTurnedAliveAgent(rightCell)) return false;
 
         if(currentStateObject.cellContainsHostageWith98Damage(rightCell)) return false;
+
         return true;
     }
 }
