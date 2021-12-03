@@ -34,6 +34,7 @@ public class MoveLeft extends Operator {
         // check if the left cell contains hostage which is turned to agent and not yet killed
         if(currentStateObject.cellContainsTurnedAliveAgent(leftCell)) return false;
 
+        if(currentStateObject.cellContainsHostageWith98Damage(leftCell)) return false;
         return true;
     }
 }

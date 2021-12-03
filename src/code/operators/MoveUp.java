@@ -35,6 +35,8 @@ public class MoveUp extends Operator {
         // check if the up cell contains hostage which is turned to agent and not yet killed
         if (currentStateObject.cellContainsTurnedAliveAgent(upCell)) return false;
 
+        if(currentStateObject.cellContainsHostageWith98Damage(upCell)) return false;
+
         return true;
     }
 }

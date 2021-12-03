@@ -61,7 +61,6 @@ public abstract class SearchProcedure { // To be named strategy
         // 1. enqueue root
         nExpandedNodes = 0;
         enqueue(root);
-        boolean firstTime = true;
 
         while (!isEmpty()) {
             // dequeue front node

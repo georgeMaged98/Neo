@@ -35,6 +35,7 @@ public class MoveDown extends Operator {
         // check if the down cell contains hostage which is turned to agent and not yet killed
         if(currentStateObject.cellContainsTurnedAliveAgent(downCell)) return false;
 
+        if(currentStateObject.cellContainsHostageWith98Damage(downCell)) return false;
         return true;
     }
 }

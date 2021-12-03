@@ -189,8 +189,8 @@ public class Matrix extends SearchProblem {
     public static void main(String[] args) throws IOException {
 //        String s="1;;;2;;;";
 //        System.out.println(Arrays.toString(s.split(";",-1)));
-        String str = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
-        System.out.println(solve(str, "BF", true));
+        String str = "5,5;2;0,4;3,4;3,1,1,1;2,3;3,0,0,1,0,1,3,0;4,2,54,4,0,85,1,0,43";
+        System.out.println(solve(str, "ID", true));
     }
 
     public boolean isNeoAtTB(StateObject stateObject) {
@@ -218,8 +218,8 @@ public class Matrix extends SearchProblem {
         Matrix matrix = new Matrix(grid);
         SearchProcedure searchProcedure = getSearchProc(strategy, matrix);
         // create node -initialState -
-        StateObject stateObject = new StateObject();
-        matrix.fillStateObject(stateObject);
+        StateObject stateObject = matrix.fillStateObject();
+
         State initialState = new State(stateObject);
         Node initialNode = new Node(initialState, null, null);
 
@@ -243,7 +243,7 @@ public class Matrix extends SearchProblem {
         ArrayList<String> ans = new ArrayList<>();
         if (visualize) {
             myWriter = new FileWriter("traceVisualize.txt");
-            //     myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
+            myWriter.write("-------------Node Kills: " + node.getnKills() + "  deathes:  " + node.getnDeathes() + "---------------------------------------------" + "--------\n");
             matrix.visualize(node.getState().getStateObject());
         }
         while (node.getParentNode() != null) {
@@ -251,13 +251,14 @@ public class Matrix extends SearchProblem {
             String s = node.getOperator().getName();
             if (visualize) {
                 myWriter.write("--------------------------" + s + "---------------------------------------------" + s + "--------\n\n\n");
-                //          myWriter.write("-------------Node Kills: " + node.getnKills()+"  deathes:  "+node.getnDeathes()+ "---------------------------------------------" + "--------\n");
+                myWriter.write("-------------Node Kills: " + node.getnKills() + "  deathes:  " + node.getnDeathes() + "---------------------------------------------" + "--------\n");
 
             }
             node = node.getParentNode();
             if (visualize)
                 matrix.visualize(node.getState().getStateObject());
         }
+//        myWriter.close();
         Collections.reverse(ans);
         String plan = State.mergeArray(ans, ",");
         CustomizedStringBuilder out = new CustomizedStringBuilder(";");
@@ -268,18 +269,17 @@ public class Matrix extends SearchProblem {
         return out.getString();
     }
 
-    private void fillStateObject(StateObject stateObject) {
-        stateObject.setNeoPos(neoPos);
-        stateObject.setIsAgentKilled(new boolean[agentsPos.length]);
-        stateObject.setHostageDamage(hostageDamage);
-        stateObject.setIsHostageCarried(new boolean[hostagePos.length]);
-        stateObject.setIsTurnedAgent(new boolean[hostagePos.length]);
-        stateObject.setIsRescuedHostage(new boolean[hostagePos.length]);
-        stateObject.setIsPillTaken(new boolean[pillsPos.length]);
-        stateObject.setnKills(0);
-        stateObject.setnDeaths(0);
-        stateObject.setNeoDamage(0);
+    private StateObject fillStateObject() {
 
+        boolean[] killedAgents = new boolean[agentsPos.length];
+        int[] damage = hostageDamage;
+        boolean[] isCarried = new boolean[hostagePos.length];
+        boolean[] isTurnedAgent = new boolean[hostagePos.length];
+        boolean[] isPillTaken = new boolean[pillsPos.length];
+        boolean[] isRescued = new boolean[hostagePos.length];
+
+        StateObject stateObject = new StateObject(neoPos, killedAgents, damage, isCarried, isTurnedAgent, isPillTaken, isRescued, 0, 0, 0, 0, 0);
+        return stateObject;
     }
 
     public GridElement getGridElement(int x, int y) {

@@ -18,6 +18,21 @@ public class StateObject {
     private int neoDamage;
     private int nKillRescued;
 
+    public StateObject(Pos neoPos, boolean[] isAgentKilled, int[] hostageDamage, boolean[] isHostageCarried, boolean[] isTurnedAgent, boolean[] isPillTaken, boolean[] isRescuedHostage, int nKills, int nDeaths, int neoDamage, int nKillRescued, int nCarried) {
+        this.neoPos = neoPos;
+        this.isAgentKilled = isAgentKilled;
+        this.hostageDamage = hostageDamage;
+        this.isHostageCarried = isHostageCarried;
+        this.isTurnedAgent = isTurnedAgent;
+        this.isPillTaken = isPillTaken;
+        this.isRescuedHostage = isRescuedHostage;
+        this.nKills = nKills;
+        this.nDeaths = nDeaths;
+        this.neoDamage = neoDamage;
+        this.nKillRescued = nKillRescued;
+        this.nCarried = nCarried;
+    }
+
     public int getnKillRescued() {
         return nKillRescued;
     }
@@ -104,12 +119,10 @@ public class StateObject {
                 hostageDamage[idx] = 100;
                 if (!isHostageCarried[idx])
                     isTurnedAgent[idx] = true;
-                else
-                    nDeaths++;
 
+                nDeaths++;
             }
         }
-
     }
 
     public int[] getHostageDamage() {
@@ -232,6 +245,13 @@ public class StateObject {
         return matrixObject == MatrixObject.HOSTAGE && !checkAgentTurned(idx) && !checkHostageCarried(idx) && !checkHostageRescued(idx);
     }
 
+    public boolean cellContainsHostageWith98Damage(GridElement cell){
+        MatrixObject matrixObject = cell.getMatrixObject();
+        int idx = cell.getIndex();
+
+        return cellContainsAliveHostage(cell) && getDamage(idx) < 98;
+    }
+
     public boolean cellContainsPill(GridElement cell) {
         MatrixObject matrixObject = cell.getMatrixObject();
         int idx = cell.getIndex();
@@ -288,7 +308,6 @@ public class StateObject {
         int idx = cell.getIndex();
         hostageDamage[idx] = -1;
         nKills++;
-        nDeaths++;
         nKillRescued++;
 
     }
@@ -308,6 +327,8 @@ public class StateObject {
         MatrixObject matrixObject = cell.getMatrixObject();
         return matrixObject == MatrixObject.PAD;
     }
+
+
 
     @Override
     public String toString() {

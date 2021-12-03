@@ -10,8 +10,8 @@ public class UCS extends SearchProcedure {
 
     private int compare(Node x, Node y) {
         if (x.getnDeathes() == y.getnDeathes()) {
-            if (x.getnKills() == y.getnKills())
-                return x.getDepth() - y.getDepth();
+//            if (x.getnKills() == y.getnKills())
+//                return x.getDepth() - y.getDepth();
             return x.getnKills() - y.getnKills();
         }
         return x.getnDeathes() - y.getnDeathes();
