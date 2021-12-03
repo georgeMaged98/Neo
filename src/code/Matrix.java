@@ -20,7 +20,17 @@ public class Matrix extends SearchProblem {
     private Pos neoPos;
     private Pos telephonePos;
     private Pos[] agentsPos, pillsPos, startPadPos, finishPadPos, hostagePos;
-
+    public int manhattanDistance(Pos from, Pos to) {
+        int ans= Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+        for (int i = 0; i < startPadPos.length; i++) {
+            ans=Math.min(ans,pathByPad(from,to,i));
+        }
+        return ans;
+    }
+    public int pathByPad(Pos from,Pos to, int idx){
+       return Math.abs(from.getX() - startPadPos[idx].getX()) + Math.abs(from.getY() - startPadPos[idx].getY())+
+               Math.abs(to.getX() - finishPadPos[idx].getX()) + Math.abs(to.getY() - finishPadPos[idx].getY());
+    }
     public Pos getTelephonePos() {
         return telephonePos;
     }
@@ -199,10 +209,9 @@ public class Matrix extends SearchProblem {
 
     public static void main(String[] args) throws IOException {
 
-//        String str = GenGrid.genGrid();
-        String str = "5,5;3;0,3;2,2;1,2;1,3,4,0,1,1,3,0;1,4,3,4,3,4,1,4,0,0,2,4,2,4,0,0;4,4,67,3,2,94,3,1,94,2,3,14,0,2,13,4,1,93";
-
-        System.out.println(solve(str, "GR2", true));
+        String str = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
+//        System.out.println(genGrid());
+        System.out.println(solve(str, "AS2", true));
     }
 
     public boolean isNeoAtTB(StateObject stateObject) {
@@ -226,11 +235,11 @@ public class Matrix extends SearchProblem {
         if (strategy.equals("GR1"))
             return new GR1(matrix);
         if (strategy.equals("AS1"))
-            return new GR1(matrix);
+            return new AS1(matrix);
         if (strategy.equals("GR2"))
             return new GR2(matrix);
         if (strategy.equals("AS2"))
-            return new GR2(matrix);
+            return new AS2(matrix);
         return null;
     }
 
@@ -307,5 +316,8 @@ public class Matrix extends SearchProblem {
         return x == -1 || y == -1 || x == width || y == height;
     }
 
+    public static String genGrid(){
+        return GenGrid.genGrid();
+    }
 
 }

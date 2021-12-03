@@ -29,7 +29,7 @@ public class GenGrid {
 
 
         int minDimension = 5;
-        int maxDimension = 5;
+        int maxDimension = 15;
         int gridXDimension = generateRandomWithinRange(minDimension, maxDimension);
         int gridYDimension = generateRandomWithinRange(minDimension, maxDimension);
 

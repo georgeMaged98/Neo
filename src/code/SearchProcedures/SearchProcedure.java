@@ -55,7 +55,7 @@ public abstract class SearchProcedure { // To be named strategy
     }
 
     public Node search(Node root) throws IOException {
-        FileWriter myWriter = new FileWriter("trace.txt");
+      //  FileWriter myWriter = new FileWriter("trace.txt");
         long cnt = 0;
 
         // 1. enqueue root
@@ -87,14 +87,14 @@ public abstract class SearchProcedure { // To be named strategy
                 Node outputNode = nextTimeStep(node, stateObject, operator);
 
                 // Check for duplicate states
-                if (outputNode == null || stateSet.contains(outputNode.getState().getPrimaryState())) {
+                if (outputNode == null || stateSet.contains(outputNode.getState().getPrimaryState()))
                     continue;
-                }
+
                 enqueue(outputNode);
             }
         }
         stateSet.clear();
-//        myWriter.close();
+
         return null;
     }
 
