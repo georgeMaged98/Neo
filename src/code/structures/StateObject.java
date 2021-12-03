@@ -6,10 +6,10 @@ import java.util.Arrays;
 
 public class StateObject {
 
-    private Pos neoPos; //1
-    private boolean[] isAgentKilled;// 1 2,4,5
-    private int[] hostageDamage; //0
-    private boolean[] isHostageCarried;//0
+    private Pos neoPos;
+    private boolean[] isAgentKilled;
+    private int[] hostageDamage;
+    private boolean[] isHostageCarried;
     private boolean[] isTurnedAgent;
     private boolean[] isPillTaken;
     private boolean[] isRescuedHostage;
@@ -24,6 +24,21 @@ public class StateObject {
             if(isPillTaken)ans+=20;
         return ans;
     }
+    public StateObject(Pos neoPos, boolean[] isAgentKilled, int[] hostageDamage, boolean[] isHostageCarried, boolean[] isTurnedAgent, boolean[] isPillTaken, boolean[] isRescuedHostage, int nKills, int nDeaths, int neoDamage, int nKillRescued, int nCarried) {
+        this.neoPos = neoPos;
+        this.isAgentKilled = isAgentKilled;
+        this.hostageDamage = hostageDamage;
+        this.isHostageCarried = isHostageCarried;
+        this.isTurnedAgent = isTurnedAgent;
+        this.isPillTaken = isPillTaken;
+        this.isRescuedHostage = isRescuedHostage;
+        this.nKills = nKills;
+        this.nDeaths = nDeaths;
+        this.neoDamage = neoDamage;
+        this.nKillRescued = nKillRescued;
+        this.nCarried = nCarried;
+    }
+
     public int getnKillRescued() {
         return nKillRescued;
     }
@@ -110,9 +125,8 @@ public class StateObject {
                 hostageDamage[idx] = 100;
                 if (!isHostageCarried[idx])
                     isTurnedAgent[idx] = true;
-                else
-                    nDeaths++;
 
+                nDeaths++;
             }
         }
 
@@ -238,6 +252,13 @@ public class StateObject {
         return matrixObject == MatrixObject.HOSTAGE && !checkAgentTurned(idx) && !checkHostageCarried(idx) && !checkHostageRescued(idx);
     }
 
+    public boolean cellContainsHostageWith98Damage(GridElement cell){
+        MatrixObject matrixObject = cell.getMatrixObject();
+        int idx = cell.getIndex();
+
+        return cellContainsAliveHostage(cell) && getDamage(idx) < 98;
+    }
+
     public boolean cellContainsPill(GridElement cell) {
         MatrixObject matrixObject = cell.getMatrixObject();
         int idx = cell.getIndex();
@@ -294,7 +315,6 @@ public class StateObject {
         int idx = cell.getIndex();
         hostageDamage[idx] = -1;
         nKills++;
-        nDeaths++;
         nKillRescued++;
 
     }
