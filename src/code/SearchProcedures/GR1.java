@@ -40,7 +40,7 @@ public class GR1 extends SearchProcedure {
         Pos hosPos = matrix.getHostagePos(idx);
         int pillEffect = stateObject.getPillEffect();
 
-        return ((manhattanDistance(neoPos, hosPos) + manhattanDistance(hosPos, TBPos) )* 2 - pillEffect <= 100 - stateObject.getDamage(idx));
+        return ((manhattanDistance(neoPos, hosPos) + manhattanDistance(hosPos, TBPos))* 2 - pillEffect <= 100 - stateObject.getDamage(idx));
 
     }
 

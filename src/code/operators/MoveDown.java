@@ -1,6 +1,6 @@
 package code.operators;
 
-import code.*;
+import code.Matrix;
 import code.structures.GridElement;
 import code.structures.Pos;
 import code.structures.StateObject;
@@ -26,14 +26,16 @@ public class MoveDown extends Operator {
         Matrix currentMatrixProblem = this.getMatrix();
 
         // check if Neo is not facing a wall
-        if (currentMatrixProblem.isPosBeyondBorders(neoPos.getX() , neoPos.getY() - 1)) return false;
+        if (currentMatrixProblem.isPosBeyondBorders(neoPos.getX(), neoPos.getY() - 1)) return false;
 
         GridElement downCell = currentMatrixProblem.getGridElement(neoPos.getX(), neoPos.getY() - 1);
         // check if the down cell contains agent which is not killed
-        if (currentStateObject.cellContainsAliveAgent(downCell))  return false;
+        if (currentStateObject.cellContainsAliveAgent(downCell)) return false;
 
         // check if the down cell contains hostage which is turned to agent and not yet killed
-        if(currentStateObject.cellContainsTurnedAliveAgent(downCell)) return false;
+        if (currentStateObject.cellContainsTurnedAliveAgent(downCell)) return false;
+
+        if (currentStateObject.cellContainsHostageWith98Damage(downCell)) return false;
 
         return true;
     }

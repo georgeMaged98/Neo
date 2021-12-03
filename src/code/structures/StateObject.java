@@ -3,10 +3,12 @@ package code.structures;
 import code.Matrix;
 
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class StateObject {
 
     private Pos neoPos; //1
+
     private boolean[] isAgentKilled;// 1 2,4,5
     private int[] hostageDamage; //0
     private boolean[] isHostageCarried;//0
@@ -18,12 +20,29 @@ public class StateObject {
     private int neoDamage;
     private int nKillRescued;
 
-    public int getPillEffect(){
-        int ans=0;
-        for(boolean isPillTaken:isPillTaken)
-            if(isPillTaken)ans+=20;
+    public StateObject(Pos neoPos, boolean[] isAgentKilled, int[] hostageDamage, boolean[] isHostageCarried, boolean[] isTurnedAgent, boolean[] isPillTaken, boolean[] isRescuedHostage, int nKills, int nDeaths, int neoDamage, int nKillRescued, int nCarried) {
+        this.neoPos = neoPos;
+        this.isAgentKilled = isAgentKilled;
+        this.hostageDamage = hostageDamage;
+        this.isHostageCarried = isHostageCarried;
+        this.isTurnedAgent = isTurnedAgent;
+        this.isPillTaken = isPillTaken;
+        this.isRescuedHostage = isRescuedHostage;
+        this.nKills = nKills;
+        this.nDeaths = nDeaths;
+        this.neoDamage = neoDamage;
+        this.nKillRescued = nKillRescued;
+        this.nCarried = nCarried;
+    }
+
+
+    public int getPillEffect() {
+        int ans = 0;
+        for (boolean isPillTaken : isPillTaken)
+            if (isPillTaken) ans += 20;
         return ans;
     }
+
     public int getnKillRescued() {
         return nKillRescued;
     }
@@ -313,6 +332,13 @@ public class StateObject {
 
         MatrixObject matrixObject = cell.getMatrixObject();
         return matrixObject == MatrixObject.PAD;
+    }
+
+    public boolean cellContainsHostageWith98Damage(GridElement cell) {
+        MatrixObject matrixObject = cell.getMatrixObject();
+        int idx = cell.getIndex();
+
+        return cellContainsAliveHostage(cell) && getDamage(idx) >= 98;
     }
 
     @Override

@@ -5,6 +5,7 @@ import code.structures.Pos;
 import code.structures.StateObject;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class State {
     public String getData() {
@@ -72,27 +73,34 @@ public class State {
     public StateObject getStateObject() {
 
         String[] stateArray = data.split(";", -1);
-        StateObject stateObject = new StateObject();
 
-        stateObject.setNeoPos(getNeoPos(stateArray[0]));
-        stateObject.setNeoDamage(getNeoDamage(stateArray[0]));
-        stateObject.setIsAgentKilled(getKilledAgents(stateArray[1]));
-        stateObject.setnKills(nKills);
-
+        Object[] neoDetails = getNeoDetails(stateArray[0]);
+        Pos neoPos = (Pos) neoDetails[0];
+        int neoDamage = (Integer) neoDetails[1];
+        boolean[] killedAgents = getKilledAgents(stateArray[1]);
         int[] damage = getDamageHostages(stateArray[2]);
-        stateObject.setHostageDamage(damage);
+
         boolean[] isCarried = getCarriedHostages(stateArray[3]);
-        stateObject.setnCarried(stateArray[3].length());
-        stateObject.setIsHostageCarried(isCarried);
-
-        stateObject.setIsPillTaken(getTakenPills(stateArray[4]));
+        int nCarried = stateArray[3].length();
+        boolean[] isPillTaken = getTakenPills(stateArray[4]);
         boolean[] isRescued = getRescuedHostages(stateArray[5]);
-        stateObject.setIsRescuedHostage(isRescued);
-        stateObject.setIsTurnedAgent(getTurnedAgents(damage, isCarried, isRescued));
 
-        stateObject.setnDeaths(nDeaths);
-        stateObject.setnKillRescued(nKillRescued);
+        boolean[] isTurnedAgent = getTurnedAgents(damage, isCarried, isRescued);
+
+        StateObject stateObject = new StateObject(neoPos, killedAgents, damage, isCarried, isTurnedAgent, isPillTaken, isRescued, nKills, nDeaths, neoDamage, nKillRescued, nCarried);
+
         return stateObject;
+    }
+
+    public Object[] getNeoDetails(String neoDetails) {
+        Object[] out = new Object[2];
+        StringTokenizer st = new StringTokenizer(neoDetails, ",");
+        int x = Integer.parseInt(st.nextToken());
+        int y = Integer.parseInt(st.nextToken());
+        int damage = Integer.parseInt(st.nextToken());
+        out[0] = new Pos(x, y);
+        out[1] = damage;
+        return out;
     }
 
     public String getNeoPosString(StateObject stateObject) {
