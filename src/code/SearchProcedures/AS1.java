@@ -13,11 +13,9 @@ public class AS1 extends SearchProcedure {
 
     private int compare(Node x, Node y) {
         if (x.getnDeathes()+x.getExpectedDeaths() == y.getnDeathes()+y.getExpectedDeaths()) {
-//            if (x.getnKills() == y.getnKills())
-//                return x.getDepth() - y.getDepth();
             return x.getnKills() - y.getnKills();
         }
-        return x.getnDeathes() - y.getnDeathes();
+        return (x.getnDeathes() +x.getExpectedDeaths())- (y.getnDeathes()+y.getExpectedDeaths());
     }
 
     public AS1(Matrix matrix) {
@@ -26,14 +24,15 @@ public class AS1 extends SearchProcedure {
     }
 
     public int manhattanDistance(Pos from, Pos to) {
-        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+        Matrix matrix = (Matrix) problem;
+        return matrix.manhattanDistance(from,to);
     }
 
     public boolean carriedHostageWillDie(StateObject stateObject, int idx) {
         Pos neoPos = stateObject.getNeoPos();
         Pos TBPos = ((Matrix) problem).getTelephonePos();
         int pillEffect = stateObject.getPillEffect();
-        return (manhattanDistance(neoPos, TBPos) * 2 - pillEffect <= 100 - stateObject.getDamage(idx));
+        return (manhattanDistance(neoPos, TBPos) * 2 - pillEffect > 100 - stateObject.getDamage(idx));
 
     }
 
@@ -44,7 +43,7 @@ public class AS1 extends SearchProcedure {
         Pos hosPos = matrix.getHostagePos(idx);
         int pillEffect = stateObject.getPillEffect();
 
-        return ((manhattanDistance(neoPos, hosPos) + manhattanDistance(hosPos, TBPos)) * 2 - pillEffect <= 100 - stateObject.getDamage(idx));
+        return ((manhattanDistance(neoPos, hosPos) + manhattanDistance(hosPos, TBPos)) * 2 - pillEffect > 100 - stateObject.getDamage(idx));
 
     }
 
@@ -52,8 +51,9 @@ public class AS1 extends SearchProcedure {
     public Node nextTimeStep(Node node, StateObject stateObject, Operator operator) {
         int expectedDeaths = 0;
         Node outputNode = super.nextTimeStep(node, stateObject, operator);
+        if (outputNode == null) return null;
         for (int i = 0; i < stateObject.getHostagesNum(); i++) {
-            if (stateObject.checkHostageCarried(i))
+            if (stateObject.checkHostageCarried(i)&&!stateObject.checkHostageDeadCarried(i))
                 expectedDeaths+=carriedHostageWillDie(stateObject,i)?1:0;
             if (stateObject.checkHostageAlive(i))
                 expectedDeaths+=aliveHostageWillDie(stateObject,i)?1:0;

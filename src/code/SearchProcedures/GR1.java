@@ -9,7 +9,7 @@ import code.structures.StateObject;
 import java.util.PriorityQueue;
 
 public class GR1 extends SearchProcedure {
-    PriorityQueue<Node> queue = new PriorityQueue<>(this::compare);
+    PriorityQueue<Node> queue ;
 
     private int compare(Node x, Node y) {
         return x.getExpectedDeaths() -y.getExpectedDeaths();
@@ -22,14 +22,15 @@ public class GR1 extends SearchProcedure {
     }
 
     public int manhattanDistance(Pos from, Pos to) {
-        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+        Matrix matrix = (Matrix) problem;
+        return matrix.manhattanDistance(from,to);
     }
 
     public boolean carriedHostageWillDie(StateObject stateObject, int idx) {
         Pos neoPos = stateObject.getNeoPos();
         Pos TBPos = ((Matrix) problem).getTelephonePos();
         int pillEffect = stateObject.getPillEffect();
-        return (manhattanDistance(neoPos, TBPos) * 2 - pillEffect <= 100 - stateObject.getDamage(idx));
+        return (manhattanDistance(neoPos, TBPos) * 2 - pillEffect > 100 - stateObject.getDamage(idx));
 
     }
 
@@ -40,7 +41,7 @@ public class GR1 extends SearchProcedure {
         Pos hosPos = matrix.getHostagePos(idx);
         int pillEffect = stateObject.getPillEffect();
 
-        return ((manhattanDistance(neoPos, hosPos) + manhattanDistance(hosPos, TBPos) )* 2 - pillEffect <= 100 - stateObject.getDamage(idx));
+        return ((manhattanDistance(neoPos, hosPos) + manhattanDistance(hosPos, TBPos) )* 2 - pillEffect > 100 - stateObject.getDamage(idx));
 
     }
 

@@ -12,11 +12,8 @@ public class AS2 extends SearchProcedure {
     PriorityQueue<Node> queue;
 
     private int compare(Node x, Node y) {
-        if (x.getnDeathes()+x.getExpectedKills() == y.getnDeathes()+y.getExpectedKills()) {
-//            if (x.getnKills() == y.getnKills())
-//                return x.getDepth() - y.getDepth();
-            return x.getnKills() - y.getnKills();
-        }
+        if (x.getnDeathes() == y.getnDeathes())
+            return x.getnKills() + x.getExpectedKills() - (y.getnKills() + y.getExpectedKills());
         return x.getnDeathes() - y.getnDeathes();
     }
 
@@ -26,7 +23,8 @@ public class AS2 extends SearchProcedure {
     }
 
     public int manhattanDistance(Pos from, Pos to) {
-        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+        Matrix matrix = (Matrix) problem;
+        return matrix.manhattanDistance(from, to);
     }
 
 
@@ -37,7 +35,7 @@ public class AS2 extends SearchProcedure {
         Pos hosPos = matrix.getHostagePos(idx);
         int pillEffect = stateObject.getPillEffect();
 
-        return ((manhattanDistance(neoPos, hosPos)) * 2 - pillEffect <= 100 - stateObject.getDamage(idx));
+        return ((manhattanDistance(neoPos, hosPos)) * 2 - pillEffect > 100 - stateObject.getDamage(idx));
 
     }
 
@@ -49,7 +47,6 @@ public class AS2 extends SearchProcedure {
         for (int i = 0; i < stateObject.getHostagesNum(); i++) {
             if (stateObject.checkHostageAlive(i))
                 expectedDeaths += aliveHostageWillDie(stateObject, i) ? 1 : 0;
-
 
         }
         outputNode.setExpectedDeaths(expectedDeaths);

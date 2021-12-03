@@ -22,7 +22,8 @@ public class GR2 extends SearchProcedure {
     }
 
     public int manhattanDistance(Pos from, Pos to) {
-        return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+        Matrix matrix = (Matrix) problem;
+        return matrix.manhattanDistance(from,to);
     }
 
 
@@ -33,7 +34,7 @@ public class GR2 extends SearchProcedure {
         Pos hosPos = matrix.getHostagePos(idx);
         int pillEffect = stateObject.getPillEffect();
 
-        return ((manhattanDistance(neoPos, hosPos)) * 2 - pillEffect <= 100 - stateObject.getDamage(idx));
+        return ((manhattanDistance(neoPos, hosPos)) * 2 - pillEffect > 100 - stateObject.getDamage(idx));
 
     }
 
@@ -48,7 +49,7 @@ public class GR2 extends SearchProcedure {
 
 
         }
-        outputNode.setExpectedDeaths(expectedDeaths);
+        outputNode.setExpectedKills(expectedDeaths);
         return outputNode;
     }
 
