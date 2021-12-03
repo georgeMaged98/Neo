@@ -21,12 +21,15 @@ public class Matrix extends SearchProblem {
 
     private Pos telephonePos;
     private Pos[] agentsPos, pillsPos, startPadPos, finishPadPos, hostagePos;
+
     public Pos getTelephonePos() {
         return telephonePos;
     }
-    public Pos getHostagePos(int idx){
+
+    public Pos getHostagePos(int idx) {
         return hostagePos[idx];
     }
+
     static FileWriter myWriter;
 
     public static String fill(String s, int len) {
@@ -194,8 +197,8 @@ public class Matrix extends SearchProblem {
     }
 
     public static void main(String[] args) throws IOException {
-//        String s="1;;;2;;;";
-//        System.out.println(Arrays.toString(s.split(";",-1)));
+
+
         String str = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
         System.out.println(solve(str, "BF", true));
     }
@@ -218,13 +221,13 @@ public class Matrix extends SearchProblem {
             return new UCS(matrix);
         if (strategy.equals("ID"))
             return new IDS(matrix);
-        if(strategy.equals("GR1"))
+        if (strategy.equals("GR1"))
             return new GR1(matrix);
-        if(strategy.equals("AS1"))
+        if (strategy.equals("AS1"))
             return new GR1(matrix);
-        if(strategy.equals("GR2"))
+        if (strategy.equals("GR2"))
             return new GR2(matrix);
-        if(strategy.equals("AS2"))
+        if (strategy.equals("AS2"))
             return new GR2(matrix);
         return null;
     }
@@ -233,8 +236,8 @@ public class Matrix extends SearchProblem {
         Matrix matrix = new Matrix(grid);
         SearchProcedure searchProcedure = getSearchProc(strategy, matrix);
         // create node -initialState -
-        StateObject stateObject = new StateObject();
-        matrix.fillStateObject(stateObject);
+        StateObject stateObject = matrix.fillStateObject();
+
         State initialState = new State(stateObject);
         Node initialNode = new Node(initialState, null, null);
 
@@ -283,18 +286,17 @@ public class Matrix extends SearchProblem {
         return out.getString();
     }
 
-    private void fillStateObject(StateObject stateObject) {
-        stateObject.setNeoPos(neoPos);
-        stateObject.setIsAgentKilled(new boolean[agentsPos.length]);
-        stateObject.setHostageDamage(hostageDamage);
-        stateObject.setIsHostageCarried(new boolean[hostagePos.length]);
-        stateObject.setIsTurnedAgent(new boolean[hostagePos.length]);
-        stateObject.setIsRescuedHostage(new boolean[hostagePos.length]);
-        stateObject.setIsPillTaken(new boolean[pillsPos.length]);
-        stateObject.setnKills(0);
-        stateObject.setnDeaths(0);
-        stateObject.setNeoDamage(0);
+    private StateObject fillStateObject() {
 
+        boolean[] killedAgents = new boolean[agentsPos.length];
+        int[] damage = hostageDamage;
+        boolean[] isCarried = new boolean[hostagePos.length];
+        boolean[] isTurnedAgent = new boolean[hostagePos.length];
+        boolean[] isPillTaken = new boolean[pillsPos.length];
+        boolean[] isRescued = new boolean[hostagePos.length];
+
+        StateObject stateObject = new StateObject(neoPos, killedAgents, damage, isCarried, isTurnedAgent, isPillTaken, isRescued, 0, 0, 0, 0, 0);
+        return stateObject;
     }
 
     public GridElement getGridElement(int x, int y) {
